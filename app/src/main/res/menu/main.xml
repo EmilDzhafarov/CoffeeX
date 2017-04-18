@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filter_badge"
+        android:orderInCategory="100"
+        android:title="@string/filter_badge"
+        app:showAsAction="always"
+        android:icon="@drawable/filter_badge" />
+
+    <item
+        android:id="@+id/search_badge"
+        android:orderInCategory="100"
+        android:title="@string/search_badge"
+        app:showAsAction="always"
+        android:icon="@drawable/search_badge" />
+
+</menu>
