@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="pc.emil.coffeex.activities.LoginActivity"
-    tools:showIn="@layout/app_bar_login">
+    tools:context="pc.emil.coffeex.activities.RegisterUserActivity"
+    tools:showIn="@layout/app_bar_register_user">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -31,22 +31,36 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:gravity="center_horizontal"
-            android:text="Sign In"
+            android:text="Sign Up"
             android:textSize="26dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/login"
+            android:id="@+id/register_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Your login" />
 
         <EditText
             android:inputType="textPassword"
-            android:id="@+id/password"
+            android:id="@+id/register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Your password" />
+
+        <EditText
+            android:inputType="textPassword"
+            android:id="@+id/check_register_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Repeat password" />
+
+        <EditText
+            android:inputType="textEmailAddress"
+            android:id="@+id/register_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your email" />
 
         <Button
             android:layout_marginStart="8dp"
@@ -54,26 +68,11 @@
             android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sign_in_button"
-            android:text="Sign in" />
-
-        <TextView
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="I haven't an account"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:background="@null"
-            android:id="@+id/sign_up_button"
-            android:textColor="@color/colorAccent"/>
+            android:id="@+id/register_button"
+            android:text="Sign Up" />
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/register_progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

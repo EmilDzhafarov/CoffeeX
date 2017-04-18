@@ -21,6 +21,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,7 +36,11 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="Sign In"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.RegisterUserActivity"
+            android:label="Sign Up"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

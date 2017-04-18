@@ -12,50 +12,49 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.net.Inet4Address;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import pc.emil.coffeex.R;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
-        NavigationView.OnNavigationItemSelectedListener{
+public class RegisterUserActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+        View.OnClickListener {
 
-    private EditText logEd;
-    private EditText passEd;
-    private ProgressBar progressBar;
+    private EditText registerLogin;
+    private EditText registerPassword;
+    private EditText checkRegisterPassword;
+    private EditText registerEmail;
+    private ProgressBar registerProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register_user);
 
-        Button signIn = (Button) findViewById(R.id.sign_in_button);
-        signIn.setOnClickListener(this);
-
-        Button signUp = (Button) findViewById(R.id.sign_up_button);
-        signUp.setOnClickListener(this);
-
-        logEd = (EditText) findViewById(R.id.login);
-        passEd = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setIndeterminate(false);
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.login_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.register_user_toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.login_drawer_layout);
+        registerLogin = (EditText) findViewById(R.id.register_login);
+        registerPassword = (EditText) findViewById(R.id.register_password);
+        checkRegisterPassword = (EditText) findViewById(R.id.check_register_password);
+        registerEmail = (EditText) findViewById(R.id.register_email);
+        registerProgressBar = (ProgressBar) findViewById(R.id.register_progressBar);
+        registerProgressBar.setIndeterminate(false);
+        registerProgressBar.setVisibility(ProgressBar.INVISIBLE);
+        Button registerBtn = (Button) findViewById(R.id.register_button);
+        registerBtn.setOnClickListener(this);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.register_user_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -67,30 +66,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.sign_in_button :
-                new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                CheckingUser check = new CheckingUser();
-                                check.execute(logEd.getText().toString(), passEd.getText().toString());
-                            }
-                        }
-                ).start();
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                break;
-            case R.id.sign_up_button :
-                Intent intent = new Intent(this, RegisterUserActivity.class);
-                startActivity(intent);
-                break;
-        }
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        RegisteringUser check = new RegisteringUser();
+                        check.execute(registerLogin.getText().toString(),
+                                registerPassword.getText().toString(),
+                                checkRegisterPassword.getText().toString(),
+                                registerEmail.getText().toString());
+                    }
+                }
+        ).start();
+        registerProgressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.login_drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.register_user_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -124,9 +117,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
-    private class CheckingUser extends AsyncTask<String, Void, Void> {
+    private class RegisteringUser extends AsyncTask<String, Void, Void> {
 
-        private boolean find = false;
+        private boolean existLogin = false;
+        private boolean existEmail = false;
+        private boolean passEquals = true;
 
         private Connection connection = null;
         private Statement statement = null;
@@ -159,20 +154,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         protected Void doInBackground(String... data) {
+
+            if (!data[1].equals(data[2])) {
+                passEquals = false;
+                return null;
+            }
+
             try {
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(
                         "SELECT Users.[User].login, " +
-                                "Users.[User].password " +
+                                "Users.[User].password," +
+                                "Users.[User].email " +
                                 "FROM Users.[User]");
 
                 while (resultSet.next()) {
-                    if (resultSet.getString(1).equals(data[0]) &&
-                            resultSet.getString(2).equals(data[1])) {
-                        find = true;
-                        return null;
+                    if (resultSet.getString(1).equals(data[0])) {
+                        existLogin = true;
+                        break;
+                    } else if (resultSet.getString(3).equals(data[3])) {
+                        existEmail = true;
+                        break;
                     }
                 }
+
+                statement.execute("INSERT INTO Users.[User] VALUES ('" + data[1] + "', '"
+                        + data[0] + "', '" + data[3] + "', '1111')");
+
             } catch (Exception e) {
                 Log.e("Error", "Error Message: ", e);
             }
@@ -196,16 +204,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.e("Error", "Error message", ex);
             }
 
-            if (find) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(LoginActivity.this,
-                        "User not found! Please sign up",
-                        Toast.LENGTH_LONG).show();
+            String message = "";
+
+            if (existLogin) {
+                message = "Login has already exist";
+            } else if (!passEquals) {
+                message = "Passwords are not equals";
+            } else if (existEmail) {
+                message = "Email has already used";
             }
 
-            LoginActivity.this.progressBar.setVisibility(ProgressBar.GONE);
+            if (!message.equals("")) {
+                Toast.makeText(
+                        RegisterUserActivity.this,
+                        message,
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                Intent intent = new Intent(RegisterUserActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+
+            RegisterUserActivity.this.registerProgressBar.setVisibility(ProgressBar.GONE);
         }
     }
 }
