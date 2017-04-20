@@ -41,6 +41,10 @@
             android:name=".activities.RegisterUserActivity"
             android:label="Sign Up"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SubscriptionsActivity"
+            android:label="Subscriptions"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -107,22 +107,29 @@ public class CoffeeShopActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+            Class dest = LoginActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
+        } else if (id == R.id.nav_subscriptions) {
+            Class dest = SubscriptionsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_coffee_shops) {
+            Class dest = MainActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.coffee_drawer_layout);

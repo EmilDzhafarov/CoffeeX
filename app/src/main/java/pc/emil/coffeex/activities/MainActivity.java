@@ -3,6 +3,7 @@ package pc.emil.coffeex.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity
 
     private ListView listView;
     private ArrayList<CoffeeShop> shops = new ArrayList<>();
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.ivMain);
+        progressBar = (ProgressBar) findViewById(R.id.main_progressBar);
         final AsyncRetrieveData asyncRetrieveData = new AsyncRetrieveData();
 
         new Thread(new Runnable() {
@@ -52,6 +57,21 @@ public class MainActivity extends AppCompatActivity
                 asyncRetrieveData.execute();
             }
         }).start();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+        String login = sPref.getString(LoginActivity.SAVED_LOGIN, "");
+        String pass = sPref.getString(LoginActivity.SAVED_PASSWORD, "");
+
+        if (!login.equals("") && !pass.equals("")) {
+            View header = navigationView.getHeaderView(0);
+            TextView userName = (TextView) header.findViewById(R.id.user_name);
+            userName.setText(login);
+            Toast.makeText(this,"fvfd",Toast.LENGTH_LONG).show();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,9 +80,6 @@ public class MainActivity extends AppCompatActivity
                         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -149,22 +166,29 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+            Class dest = LoginActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
+        } else if (id == R.id.nav_subscriptions) {
+            Class dest = SubscriptionsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_coffee_shops) {
+            Class dest = MainActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -172,7 +196,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private class AsyncRetrieveData extends AsyncTask<Void, Void, Boolean> {
+    private class AsyncRetrieveData extends AsyncTask<Void, Void, Void> {
 
         private Connection connection = null;
         private Statement statement = null;
@@ -184,8 +208,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-
             String connectionString =
                     "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
                             + "databaseName=" + dbName
@@ -206,7 +228,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {
             try {
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(
@@ -240,19 +262,15 @@ public class MainActivity extends AppCompatActivity
                     shops.add(shop);
                 }
 
-                return true;
-
             } catch (Exception e) {
                 Log.e("Error", "Error Message: ", e);
             }
 
-            return false;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Boolean aVoid) {
-            super.onPostExecute(aVoid);
-
+        protected void onPostExecute(Void aVoid) {
             try {
                 if (connection != null) {
                     connection.close();
@@ -278,6 +296,8 @@ public class MainActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
+
+            MainActivity.this.progressBar.setVisibility(ProgressBar.GONE);
         }
     }
 }
