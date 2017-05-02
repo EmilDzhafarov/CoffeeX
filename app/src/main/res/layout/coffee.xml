@@ -16,38 +16,30 @@
 
         <TextView
             android:layout_gravity="center_horizontal"
-            android:id="@+id/title"
-            android:text="Title"
+            android:id="@+id/coffee_name"
+            android:text="Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/Base.TextAppearance.AppCompat.Large" />
         <TextView
             android:layout_gravity="center_horizontal"
-            android:id="@+id/address"
+            android:id="@+id/coffee_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address"
+            android:text="Price"
             android:layout_weight="1"
             style="@style/Base.TextAppearance.AppCompat.Medium"/>
         <TextView
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:id="@+id/phone_number"
+            android:id="@+id/coffee_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phone number"
+            android:text="Description"
             android:layout_weight="1"
             style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
-        <RatingBar
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/ratingBar"
-            style="?android:attr/ratingBarStyleIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:numStars="5"
-            android:stepSize="0.1"
-            android:isIndicator="true"/>
     </LinearLayout>
+
 </LinearLayout>

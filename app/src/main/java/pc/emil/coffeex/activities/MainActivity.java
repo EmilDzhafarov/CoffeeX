@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +33,15 @@ import java.util.ArrayList;
 
 import pc.emil.coffeex.R;
 import pc.emil.coffeex.adapters.CoffeeShopAdapter;
+import pc.emil.coffeex.models.Coffee;
 import pc.emil.coffeex.models.CoffeeShop;
+import pc.emil.coffeex.models.User;
+
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_EMAIL;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_ID;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_LOGIN;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_PASSWORD;
+import static pc.emil.coffeex.activities.LoginActivity.globalUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -62,16 +71,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
-        String login = sPref.getString(LoginActivity.SAVED_LOGIN, "");
-        String pass = sPref.getString(LoginActivity.SAVED_PASSWORD, "");
+        View headerView = navigationView.getHeaderView(0);
+        TextView userLogin = (TextView) headerView.findViewById(R.id.user_name);
+        TextView userEmail = (TextView) headerView.findViewById(R.id.user_email);
 
-        if (!login.equals("") && !pass.equals("")) {
-            View header = navigationView.getHeaderView(0);
-            TextView userName = (TextView) header.findViewById(R.id.user_name);
-            userName.setText(login);
-            Toast.makeText(this,"fvfd",Toast.LENGTH_LONG).show();
-        }
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int id = sPref.getInt(SAVED_ID, -1);
+        String login = sPref.getString(SAVED_LOGIN, "");
+        String pass = sPref.getString(SAVED_PASSWORD, "");
+        String email = sPref.getString(SAVED_EMAIL, "");
+
+        globalUser = new User(id, login, pass, email);
+
+        userLogin.setText(login);
+        userEmail.setText(email);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,6 +93,12 @@ public class MainActivity extends AppCompatActivity
                         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        if (!login.equals("") &&!email.equals("")) {
+            Menu menu = navigationView.getMenu();
+            MenuItem item = menu.findItem(R.id.sign_in_item);
+            item.setTitle("Sign out");
+        }
     }
 
     @Override
@@ -170,10 +189,22 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            Class dest = LoginActivity.class;
-            if (this.getClass() != dest) {
-                Intent intent = new Intent(this, dest);
+            if (item.getTitle().equals("Sign out")) {
+                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor ed = sPref.edit();
+                ed.putInt(SAVED_ID, -1);
+                ed.putString(SAVED_LOGIN, "");
+                ed.putString(SAVED_PASSWORD, "");
+                ed.putString(SAVED_EMAIL, "");
+                ed.apply();
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+            } else {
+                Class dest = LoginActivity.class;
+                if (this.getClass() != dest) {
+                    Intent intent = new Intent(this, dest);
+                    startActivity(intent);
+                }
             }
         } else if (id == R.id.nav_subscriptions) {
             Class dest = SubscriptionsActivity.class;
@@ -194,6 +225,19 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        shops.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new AsyncRetrieveData().execute();
+            }
+        }).start();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     private class AsyncRetrieveData extends AsyncTask<Void, Void, Void> {
@@ -247,8 +291,42 @@ public class MainActivity extends AppCompatActivity
                                 "ON dbo.Coffee_shop.address_id=dbo.Address.id");
 
                 while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+                    ResultSet getCoffees = connection.createStatement().executeQuery(
+                            "SELECT dbo.Coffee.Name," +
+                            "dbo.Coffee.Price," +
+                            "dbo.Coffee.Description " +
+                            "FROM dbo.Coffee " +
+                            "WHERE coffee_shop_id=" + id
+                    );
+                    ArrayList<Coffee> coffees = new ArrayList<>();
+
+                    while (getCoffees.next()) {
+                        Coffee coffee = new Coffee(
+                                getCoffees.getString(1),
+                                getCoffees.getDouble(2),
+                                getCoffees.getString(3)
+                        );
+                        coffees.add(coffee);
+                    }
+
+                    ResultSet getRating = connection.createStatement().executeQuery(
+                        "SELECT dbo.Coffee_rating.rating FROM dbo.Coffee_rating " +
+                                "WHERE coffee_shop_id = " + id
+                    );
+
+                    float rating = 0;
+                    int count= 0;
+
+                    while (getRating.next()) {
+                        rating += getRating.getFloat(1);
+                        count++;
+                    }
+
+                    rating /= count;
+
                     CoffeeShop shop = new CoffeeShop(
-                            resultSet.getInt(1),
+                            id,
                             resultSet.getString(2),
                             resultSet.getString(3),
                             resultSet.getString(4),
@@ -258,7 +336,9 @@ public class MainActivity extends AppCompatActivity
                             resultSet.getString(8),
                             resultSet.getString(9),
                             resultSet.getString(10),
-                            resultSet.getString(11));
+                            resultSet.getString(11),
+                            coffees,
+                            rating);
                     shops.add(shop);
                 }
 

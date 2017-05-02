@@ -1,7 +1,9 @@
 package pc.emil.coffeex.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -27,6 +31,13 @@ import java.util.ArrayList;
 import pc.emil.coffeex.R;
 import pc.emil.coffeex.adapters.SubscriptionAdapter;
 import pc.emil.coffeex.models.Subscription;
+import pc.emil.coffeex.models.User;
+
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_EMAIL;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_ID;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_LOGIN;
+import static pc.emil.coffeex.activities.LoginActivity.SAVED_PASSWORD;
+import static pc.emil.coffeex.activities.LoginActivity.globalUser;
 
 public class SubscriptionsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -63,6 +74,27 @@ public class SubscriptionsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView userLogin = (TextView) headerView.findViewById(R.id.user_name);
+        TextView userEmail = (TextView) headerView.findViewById(R.id.user_email);
+
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int id = sPref.getInt(SAVED_ID, -1);
+        String login = sPref.getString(LoginActivity.SAVED_LOGIN, "");
+        String pass = sPref.getString(LoginActivity.SAVED_PASSWORD, "");
+        String email = sPref.getString(LoginActivity.SAVED_EMAIL, "");
+
+        globalUser = new User(id, login, pass, email);
+
+        userLogin.setText(login);
+        userEmail.setText(email);
+
+        if (!login.equals("") &&!email.equals("")) {
+            Menu menu = navigationView.getMenu();
+            MenuItem item = menu.findItem(R.id.sign_in_item);
+            item.setTitle("Sign out");
+        }
     }
 
     @Override
@@ -82,10 +114,22 @@ public class SubscriptionsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            Class dest = LoginActivity.class;
-            if (this.getClass() != dest) {
-                Intent intent = new Intent(this, dest);
+            if (item.getTitle().equals("Sign out")) {
+                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor ed = sPref.edit();
+                ed.putInt(SAVED_ID, -1);
+                ed.putString(SAVED_LOGIN, "");
+                ed.putString(SAVED_PASSWORD, "");
+                ed.putString(SAVED_EMAIL, "");
+                ed.apply();
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+            } else {
+                Class dest = LoginActivity.class;
+                if (this.getClass() != dest) {
+                    Intent intent = new Intent(this, dest);
+                    startActivity(intent);
+                }
             }
         } else if (id == R.id.nav_subscriptions) {
             Class dest = SubscriptionsActivity.class;

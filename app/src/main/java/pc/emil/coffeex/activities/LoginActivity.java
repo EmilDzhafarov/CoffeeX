@@ -3,6 +3,8 @@ package pc.emil.coffeex.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,12 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -28,6 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import pc.emil.coffeex.R;
+import pc.emil.coffeex.models.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener{
@@ -37,6 +42,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ProgressBar progressBar;
     public static final String SAVED_LOGIN = "saved_login";
     public static final String SAVED_PASSWORD = "saved_password";
+    public static final String SAVED_EMAIL = "saved_email";
+    public static final String SAVED_ID = "saved_id";
+    public static User globalUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +74,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView userLogin = (TextView) headerView.findViewById(R.id.user_name);
+        TextView userEmail = (TextView) headerView.findViewById(R.id.user_email);
+
+        SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int id = sPref.getInt(LoginActivity.SAVED_ID, -1);
+        String login = sPref.getString(LoginActivity.SAVED_LOGIN, "");
+        String pass = sPref.getString(LoginActivity.SAVED_PASSWORD, "");
+        String email = sPref.getString(LoginActivity.SAVED_EMAIL, "");
+
+        globalUser = new User(id, login, pass, email);
+
+        userLogin.setText(login);
+        userEmail.setText(email);
+
+        if (!login.equals("") &&!email.equals("")) {
+            Menu menu = navigationView.getMenu();
+            MenuItem item = menu.findItem(R.id.sign_in_item);
+            item.setTitle("Sign out");
+        }
     }
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.sign_in_button :
                 new Thread(
@@ -108,10 +136,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            Class dest = LoginActivity.class;
-            if (this.getClass() != dest) {
-                Intent intent = new Intent(this, dest);
+            if (item.getTitle().equals("Sign out")) {
+                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor ed = sPref.edit();
+                ed.putString(SAVED_LOGIN, "");
+                ed.putString(SAVED_PASSWORD, "");
+                ed.putString(SAVED_EMAIL, "");
+                ed.apply();
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+            } else {
+                Class dest = LoginActivity.class;
+                if (this.getClass() != dest) {
+                    Intent intent = new Intent(this, dest);
+                    startActivity(intent);
+                }
             }
         } else if (id == R.id.nav_subscriptions) {
             Class dest = SubscriptionsActivity.class;
@@ -146,9 +185,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         private String userName = "Coffee@coffeenure;";
         private String dbName = "Coffee;";
 
-        private String login;
-        private String pass;
-
         @Override
         protected void onPreExecute() {
             String connectionString =
@@ -175,21 +211,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
                 statement = connection.createStatement();
                 resultSet = statement.executeQuery(
-                        "SELECT Users.[User].login, " +
-                                "Users.[User].password " +
+                        "SELECT Users.[User].id, " +
+                                "Users.[User].login, " +
+                                "Users.[User].password," +
+                                "Users.[User].email " +
                                 "FROM Users.[User]");
 
                 while (resultSet.next()) {
-                    if (resultSet.getString(1).equals(data[0]) &&
-                            resultSet.getString(2).equals(data[1])) {
+                    if (resultSet.getString(2).equals(data[0]) &&
+                            resultSet.getString(3).equals(data[1])) {
                         find = true;
+                        globalUser = new User(
+                                resultSet.getInt(1),
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getString(4)
+                        );
                         return null;
                     }
                 }
-
-                login = data[0];
-                pass = data[1];
-
             } catch (Exception e) {
                 Log.e("Error", "Error Message: ", e);
             }
@@ -214,11 +254,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             if (find) {
-                SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                 SharedPreferences.Editor ed = sPref.edit();
-                ed.putString(SAVED_LOGIN, login);
-                ed.putString(SAVED_PASSWORD, pass);
+                ed.putInt(SAVED_ID, globalUser.getId());
+                ed.putString(SAVED_LOGIN, globalUser.getLogin());
+                ed.putString(SAVED_PASSWORD, globalUser.getPassword());
+                ed.putString(SAVED_EMAIL, globalUser.getEmail());
                 ed.apply();
+
                 Intent intent = new Intent(LoginActivity.this, SubscriptionsActivity.class);
                 startActivity(intent);
             } else {

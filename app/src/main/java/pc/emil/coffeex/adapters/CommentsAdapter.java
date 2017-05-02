@@ -5,19 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import pc.emil.coffeex.R;
-import pc.emil.coffeex.models.CoffeeShop;
+import pc.emil.coffeex.models.Comment;
 
-public class CoffeeShopAdapter extends BaseAdapter {
 
+public class CommentsAdapter extends BaseAdapter {
     private Context context;
-    private CoffeeShop[] data;
+    private Comment[] data;
     private static LayoutInflater inflater = null;
 
-    public CoffeeShopAdapter(Context context, CoffeeShop[] data) {
+    public CommentsAdapter(Context context, Comment[] data) {
         this.context = context;
         this.data = data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -42,18 +41,16 @@ public class CoffeeShopAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (vi == null) {
-            vi = inflater.inflate(R.layout.coffee_shop, null);
+            vi = inflater.inflate(R.layout.comment, null);
         }
 
-        TextView title = (TextView) vi.findViewById(R.id.title);
-        TextView address = (TextView) vi.findViewById(R.id.address);
-        TextView phoneNumber = (TextView) vi.findViewById(R.id.phone_number);
-        RatingBar ratingBar = (RatingBar) vi.findViewById(R.id.ratingBar);
+        TextView text = (TextView) vi.findViewById(R.id.comment_text);
+        TextView dateTime = (TextView) vi.findViewById(R.id.comment_date_time);
+        TextView user = (TextView) vi.findViewById(R.id.comment_user);
 
-        title.setText(data[position].getName());
-        address.setText(data[position].getAddress());
-        phoneNumber.setText(data[position].getPhone());
-        ratingBar.setRating(data[position].getRating());
+        text.setText(data[position].getText());
+        dateTime.setText(data[position].getDateTime());
+        user.setText(data[position].getUserLogin());
 
         return vi;
     }
