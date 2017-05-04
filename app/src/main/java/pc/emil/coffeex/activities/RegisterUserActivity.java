@@ -141,7 +141,9 @@ public class RegisterUserActivity extends AppCompatActivity
                 ed.putString(SAVED_EMAIL, "");
                 ed.apply();
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             } else {
                 Class dest = LoginActivity.class;
                 if (this.getClass() != dest) {
@@ -153,7 +155,9 @@ public class RegisterUserActivity extends AppCompatActivity
             Class dest = SubscriptionsActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         } else if (id == R.id.nav_settings) {
 
@@ -161,7 +165,9 @@ public class RegisterUserActivity extends AppCompatActivity
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -235,10 +241,10 @@ public class RegisterUserActivity extends AppCompatActivity
                     while (resultSet.next()) {
                         if (resultSet.getString(1).equals(data[0])) {
                             errorCode = 5;
-                            break;
+                            return null;
                         } else if (resultSet.getString(3).equals(data[3])) {
                             errorCode = 6;
-                            break;
+                            return null;
                         }
                     }
 
@@ -302,7 +308,9 @@ public class RegisterUserActivity extends AppCompatActivity
                 ).show();
             } else {
                 Intent intent = new Intent(RegisterUserActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
 
             RegisterUserActivity.this.registerProgressBar.setVisibility(ProgressBar.GONE);

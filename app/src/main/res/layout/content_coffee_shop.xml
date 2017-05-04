@@ -288,6 +288,7 @@
             android:layout_weight="1">
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/show_comments"
@@ -304,6 +305,7 @@
                 android:layout_marginEnd="8dp" />
 
             <Button
+                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/show_coffee_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

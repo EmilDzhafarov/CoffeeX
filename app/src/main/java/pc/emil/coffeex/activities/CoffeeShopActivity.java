@@ -233,12 +233,6 @@ public class CoffeeShopActivity extends AppCompatActivity
             item.setTitle("Sign out");
         }
 
-        if (globalUser.getId() == -1) {
-            ratingBar.setEnabled(false);
-        } else {
-            ratingBar.setEnabled(true);
-        }
-
         new Thread(
                 new Runnable() {
                     @Override
@@ -252,13 +246,20 @@ public class CoffeeShopActivity extends AppCompatActivity
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, final float v, boolean b) {
-                ratingBar.setRating(v);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ChangingRating().execute(v);
-                    }
-                }).start();
+                if (globalUser.getId() == -1) {
+                    ratingBar.setProgress(0);
+                    Toast.makeText(CoffeeShopActivity.this,
+                             "You should be signed in!",
+                             Toast.LENGTH_SHORT).show();
+                } else {
+                    ratingBar.setRating(v);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ChangingRating().execute(v);
+                        }
+                    }).start();
+                }
             }
         });
     }
@@ -268,7 +269,7 @@ public class CoffeeShopActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.coffee_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (startRating != ratingBar.getRating()) {
+        } else if (startRating != ratingBar.getRating() && startRating != 0) {
             super.onBackPressed();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

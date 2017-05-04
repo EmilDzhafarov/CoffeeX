@@ -144,19 +144,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ed.putString(SAVED_EMAIL, "");
                 ed.apply();
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             } else {
                 Class dest = LoginActivity.class;
                 if (this.getClass() != dest) {
                     Intent intent = new Intent(this, dest);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+                    finish();
                 }
             }
         } else if (id == R.id.nav_subscriptions) {
             Class dest = SubscriptionsActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         } else if (id == R.id.nav_settings) {
 
@@ -164,7 +170,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -262,7 +270,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ed.putString(SAVED_EMAIL, globalUser.getEmail());
                 ed.apply();
 
-                Intent intent = new Intent(LoginActivity.this, SubscriptionsActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this,

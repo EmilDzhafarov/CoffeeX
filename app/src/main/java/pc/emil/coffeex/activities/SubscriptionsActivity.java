@@ -123,7 +123,9 @@ public class SubscriptionsActivity extends AppCompatActivity
                 ed.putString(SAVED_EMAIL, "");
                 ed.apply();
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             } else {
                 Class dest = LoginActivity.class;
                 if (this.getClass() != dest) {
@@ -135,7 +137,9 @@ public class SubscriptionsActivity extends AppCompatActivity
             Class dest = SubscriptionsActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         } else if (id == R.id.nav_settings) {
 
@@ -143,7 +147,9 @@ public class SubscriptionsActivity extends AppCompatActivity
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         }
 

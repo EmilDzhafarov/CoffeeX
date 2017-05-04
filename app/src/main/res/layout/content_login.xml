@@ -70,7 +70,7 @@
             android:text="Sign Up"
             android:background="@null"
             android:id="@+id/sign_up_button"
-            android:textColor="@color/colorAccent"/>
+            style="?android:attr/progressBarStyle"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

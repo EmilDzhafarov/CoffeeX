@@ -3,7 +3,6 @@ package pc.emil.coffeex.activities;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -21,7 +19,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import pc.emil.coffeex.R;
-import pc.emil.coffeex.adapters.CoffeeShopAdapter;
 import pc.emil.coffeex.adapters.CommentsAdapter;
 import pc.emil.coffeex.models.CoffeeShop;
 import pc.emil.coffeex.models.Comment;
@@ -75,15 +72,21 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.send_comment_button:
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                new SendComment().execute(editText.getText().toString());
+                if (globalUser.getId() != -1) {
+                    progressBar.setVisibility(ProgressBar.VISIBLE);
+                    new Thread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    new SendComment().execute(editText.getText().toString());
+                                }
                             }
-                        }
-                ).start();
+                    ).start();
+                } else {
+                    Toast.makeText(CoffeeShopCommentsActivity.this,
+                            "You should be signed in!",
+                            Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.clear_comment_button:
                 editText.setText("");
@@ -211,22 +214,24 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
 
         @Override
         protected void onPreExecute() {
-            String connectionString =
-                    "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
-                            + "databaseName=" + dbName
-                            + "user=" + userName
-                            + "password=" + password
-                            + "encrypt=true;"
-                            + "trustServerCertificate=false;"
-                            + "hostNameInCertificate=*.database.windows.net;"
-                            + "loginTimeout=30;";
+            if (globalUser.getId() != -1) {
+                String connectionString =
+                        "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
+                                + "databaseName=" + dbName
+                                + "user=" + userName
+                                + "password=" + password
+                                + "encrypt=true;"
+                                + "trustServerCertificate=false;"
+                                + "hostNameInCertificate=*.database.windows.net;"
+                                + "loginTimeout=30;";
 
-            try {
-                Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
-                connection = DriverManager.getConnection(connectionString);
-            } catch (InstantiationException | IllegalAccessException |
-                    ClassNotFoundException | SQLException e) {
-                Log.e("Error", "Error message", e);
+                try {
+                    Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
+                    connection = DriverManager.getConnection(connectionString);
+                } catch (InstantiationException | IllegalAccessException |
+                        ClassNotFoundException | SQLException e) {
+                    Log.e("Error", "Error message", e);
+                }
             }
         }
 
@@ -239,10 +244,9 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                     statement = connection.createStatement();
                     statement.execute(
                             "INSERT INTO dbo.Coffee_shop_comments(date_time, user_id, coffee_shop_id, text) " +
-                                    "VALUES ({fn NOW()}, " + globalUser.getId() + ", " + shop.getId() +
+                                    "VALUES (DATEADD(HOUR, 3, GETDATE()), " + globalUser.getId() + ", " + shop.getId() +
                                     ", N'" + data[0] + "');"
                     );
-
                 } catch (Exception e) {
                     Log.e("Error", "Error Message: ", e);
                 }
@@ -265,10 +269,6 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                 }
             } catch (SQLException ex) {
                 Log.e("Error", "Error message", ex);
-            }
-
-            if (globalUser.getId() == -1) {
-                Toast.makeText(CoffeeShopCommentsActivity.this, "You should be signed in!", Toast.LENGTH_SHORT).show();
             }
 
             editText.setText("");

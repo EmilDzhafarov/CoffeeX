@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -198,7 +197,9 @@ public class MainActivity extends AppCompatActivity
                 ed.putString(SAVED_EMAIL, "");
                 ed.apply();
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             } else {
                 Class dest = LoginActivity.class;
                 if (this.getClass() != dest) {
@@ -210,15 +211,24 @@ public class MainActivity extends AppCompatActivity
             Class dest = SubscriptionsActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         } else if (id == R.id.nav_settings) {
+            Class dest = SettingsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
 
         } else if (id == R.id.nav_coffee_shops) {
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {
                 Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }
         }
 
@@ -231,6 +241,7 @@ public class MainActivity extends AppCompatActivity
     public void onRestart() {
         super.onRestart();
         shops.clear();
+        listView.setAdapter(null);
         new Thread(new Runnable() {
             @Override
             public void run() {
