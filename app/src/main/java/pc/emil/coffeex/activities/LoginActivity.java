@@ -165,7 +165,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
             }
         } else if (id == R.id.nav_settings) {
-
+            Class dest = SettingsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_coffee_shops) {
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {

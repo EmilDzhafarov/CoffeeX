@@ -70,12 +70,30 @@
             android:enabled="false" />
     </LinearLayout>
 
-    <Button
+
+    <LinearLayout
+        android:layout_weight="1"
+      android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save changes"
-        android:background="@null"
-        style="?android:attr/buttonBarButtonStyle"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save changes"
+            android:id="@+id/settings_save_changes"
+            android:background="@null"
+            style="?android:attr/buttonBarButtonStyle"/>
+
+        <ProgressBar
+            android:layout_marginStart="15dp"
+            android:id="@+id/settings_save_changes_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="?android:attr/progressBarStyleSmall"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

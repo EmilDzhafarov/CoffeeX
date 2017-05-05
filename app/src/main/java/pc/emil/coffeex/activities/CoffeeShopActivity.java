@@ -309,7 +309,11 @@ public class CoffeeShopActivity extends AppCompatActivity
                 startActivity(intent);
             }
         } else if (id == R.id.nav_settings) {
-
+            Class dest = SettingsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_coffee_shops) {
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {

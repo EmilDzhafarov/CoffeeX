@@ -27,6 +27,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -160,7 +161,11 @@ public class RegisterUserActivity extends AppCompatActivity
                 finish();
             }
         } else if (id == R.id.nav_settings) {
-
+            Class dest = SettingsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_coffee_shops) {
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {

@@ -40,11 +40,11 @@ import static pc.emil.coffeex.activities.LoginActivity.SAVED_PASSWORD;
 import static pc.emil.coffeex.activities.LoginActivity.globalUser;
 
 public class SubscriptionsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView listView;
     private ArrayList<Subscription> subscriptions = new ArrayList<>();
-    private ProgressBar progressBar;
+    public static ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class SubscriptionsActivity extends AppCompatActivity
         userLogin.setText(login);
         userEmail.setText(email);
 
-        if (!login.equals("") &&!email.equals("")) {
+        if (!login.equals("") && !email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
             item.setTitle("Sign out");
@@ -102,7 +102,7 @@ public class SubscriptionsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.subscriptions_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }  else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -143,6 +143,12 @@ public class SubscriptionsActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_settings) {
 
+            Class dest = SettingsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                startActivity(intent);
+            }
+
         } else if (id == R.id.nav_coffee_shops) {
             Class dest = MainActivity.class;
             if (this.getClass() != dest) {
@@ -170,8 +176,6 @@ public class SubscriptionsActivity extends AppCompatActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-
             String connectionString =
                     "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
                             + "databaseName=" + dbName
@@ -195,19 +199,44 @@ public class SubscriptionsActivity extends AppCompatActivity
         protected Void doInBackground(Void... voids) {
             try {
                 statement = connection.createStatement();
-                resultSet = statement.executeQuery(
-                        "SELECT Users.[Subscription_type].title," +
-                                "Users.[Subscription_type].Duration," +
-                                "Users.[Subscription_type].price " +
-                                "FROM Users.[Subscription_type]");
 
-                while (resultSet.next()) {
-                    Subscription sub = new Subscription(resultSet.getString(1),
-                            resultSet.getInt(2),
-                            resultSet.getDouble(3));
-                    subscriptions.add(sub);
+                ArrayList<Integer> ids = new ArrayList<>();
+                if (globalUser.getId() != -1) {
+                    resultSet = statement.executeQuery(
+                            "SELECT subscription_type_id FROM Users.[Subscription] " +
+                                    "WHERE user_id = " + globalUser.getId()
+                    );
+
+                    while (resultSet.next()) {
+                        ids.add(resultSet.getInt(1));
+                    }
                 }
 
+                resultSet = statement.executeQuery(
+                        "SELECT Users.[Subscription_type].id," +
+                                "Users.[Subscription_type].title," +
+                                "Users.[Subscription_type].Duration," +
+                                "Users.[Subscription_type].price " +
+                                "FROM Users.[Subscription_type]"
+                );
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt(1);
+
+                    Subscription sub = new Subscription(
+                            resultSet.getInt(1),
+                            resultSet.getString(2),
+                            resultSet.getInt(3),
+                            resultSet.getDouble(4));
+
+                    if (ids.contains(id)) {
+                        sub.setBuyed(true);
+                    } else {
+                        sub.setBuyed(false);
+                    }
+
+                    subscriptions.add(sub);
+                }
             } catch (Exception e) {
                 Log.e("Error", "Error Message: ", e);
             }
@@ -233,7 +262,7 @@ public class SubscriptionsActivity extends AppCompatActivity
 
             listView.setAdapter(new SubscriptionAdapter(SubscriptionsActivity.this,
                     subscriptions.toArray(new Subscription[subscriptions.size()])));
-            SubscriptionsActivity.this.progressBar.setVisibility(ProgressBar.GONE);
+            progressBar.setVisibility(ProgressBar.GONE);
         }
     }
 }

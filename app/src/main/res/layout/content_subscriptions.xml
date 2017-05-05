@@ -30,7 +30,7 @@
         android:id="@+id/subscriptions_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:divider="#2dc1f5"
+        android:divider="#5886DE"
         android:dividerHeight="1dp">
     </ListView>
 
