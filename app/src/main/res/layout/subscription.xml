@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="100dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
 
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <Button
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subscription_details"
+            android:id="@+id/details_button"
+            style="?android:attr/actionButtonStyle"/>
+
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_weight="5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/subscription_title"
                 android:text="Title"
-                android:textSize="22dp"/>
+                style="@style/Base.TextAppearance.AppCompat.Large"/>
 
             <LinearLayout
                 android:layout_gravity="center_horizontal"
@@ -37,16 +52,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Count of months: "
-                    android:textSize="18dp"/>
+                    android:text="@string/subscription_duration"
+                    style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
                 <TextView
                     android:layout_weight="1"
-                    android:text="6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/subscription_duration"
-                    android:textSize="18dp"/>
+                    style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
             </LinearLayout>
 
@@ -59,14 +73,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Price: "
-                    android:textSize="18dp"/>
+                    android:text="@string/subscription_price"
+                    style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/subscription_price"
-                    android:textSize="18dp"/>
+                    style="@style/Base.TextAppearance.AppCompat.Medium"/>
 
             </LinearLayout>
 
@@ -74,13 +88,14 @@
         </LinearLayout>
 
         <Button
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Buy"
-            android:layout_marginTop="10dp"
-            android:id="@+id/buy_button"/>
+            android:id="@+id/buy_button"
+            style="?android:attr/buttonBarButtonStyle"/>
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

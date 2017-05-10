@@ -2,6 +2,9 @@ package pc.emil.coffeex.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
@@ -125,6 +130,8 @@ public class CoffeeShopActivity extends AppCompatActivity
     private float startRating;
     private RatingBar ratingBar;
     private ProgressBar progressBar;
+    private ProgressBar imageProgressBar;
+    private ImageView imageView;
 
     @Override
     public void onClick(View view) {
@@ -175,6 +182,9 @@ public class CoffeeShopActivity extends AppCompatActivity
 
         progressBar = (ProgressBar) findViewById(R.id.coffee_progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
+        imageProgressBar = (ProgressBar) findViewById(R.id.image_progressBar);
+
+        imageView = (ImageView) findViewById(R.id.coffee_shop_imageView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.coffee_shop_toolbar);
         setSupportActionBar(toolbar);
@@ -206,7 +216,6 @@ public class CoffeeShopActivity extends AppCompatActivity
         Bundle extras = getIntent().getExtras();
         shop = (CoffeeShop) extras.getSerializable("coffee_shop");
 
-        TextView title = (TextView) findViewById(R.id.coffee_shop_title);
         TextView address = (TextView) findViewById(R.id.coffee_shop_address);
         TextView phone = (TextView) findViewById(R.id.coffee_shop_phone);
         TextView site = (TextView) findViewById(R.id.coffee_shop_site);
@@ -217,14 +226,53 @@ public class CoffeeShopActivity extends AppCompatActivity
         ImageButton instaButton = (ImageButton) findViewById(R.id.coffee_shop_insta);
 
         if (shop != null) {
-            title.setText(shop.getName());
             address.setText(shop.getAddress());
             phone.setText(shop.getPhone());
+            setTitle(shop.getName());
             site.setText(shop.getSite());
 
             fbButton.setOnClickListener(this);
             vkButton.setOnClickListener(this);
             instaButton.setOnClickListener(this);
+
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            new LoadRating().execute();
+                        }
+                    }
+            ).start();
+
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            new LoadImage().execute(shop.getId());
+                        }
+                    }
+            ).start();
+
+            startRating = ratingBar.getRating();
+            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, final float v, boolean b) {
+                    if (globalUser.getId() == -1) {
+                        ratingBar.setProgress(0);
+                        Toast.makeText(CoffeeShopActivity.this,
+                                "You should be signed in!",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        ratingBar.setRating(v);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new ChangingRating().execute(v);
+                            }
+                        }).start();
+                    }
+                }
+            });
         }
 
         if (!login.equals("") && !email.equals("")) {
@@ -232,36 +280,6 @@ public class CoffeeShopActivity extends AppCompatActivity
             MenuItem item = menu.findItem(R.id.sign_in_item);
             item.setTitle("Sign out");
         }
-
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        new LoadRating().execute();
-                    }
-                }
-        ).start();
-
-        startRating = ratingBar.getRating();
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, final float v, boolean b) {
-                if (globalUser.getId() == -1) {
-                    ratingBar.setProgress(0);
-                    Toast.makeText(CoffeeShopActivity.this,
-                             "You should be signed in!",
-                             Toast.LENGTH_SHORT).show();
-                } else {
-                    ratingBar.setRating(v);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            new ChangingRating().execute(v);
-                        }
-                    }).start();
-                }
-            }
-        });
     }
 
     @Override
@@ -327,7 +345,7 @@ public class CoffeeShopActivity extends AppCompatActivity
         return true;
     }
 
-    private class LoadRating extends AsyncTask<Void, Void, Void> {
+    private class LoadImage extends AsyncTask<Integer, Void, Void> {
         private Connection connection = null;
         private Statement statement = null;
         private ResultSet resultSet = null;
@@ -336,86 +354,8 @@ public class CoffeeShopActivity extends AppCompatActivity
         private String userName = "Coffee@coffeenure;";
         private String dbName = "Coffee;";
 
-        private float rating;
-
-        @Override
-        protected void onPreExecute() {
-            if (globalUser.getId() != -1) {
-                String connectionString =
-                        "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
-                                + "databaseName=" + dbName
-                                + "user=" + userName
-                                + "password=" + password
-                                + "encrypt=true;"
-                                + "trustServerCertificate=false;"
-                                + "hostNameInCertificate=*.database.windows.net;"
-                                + "loginTimeout=30;";
-
-                try {
-                    Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
-                    connection = DriverManager.getConnection(connectionString);
-                } catch (InstantiationException | IllegalAccessException |
-                        ClassNotFoundException | SQLException e) {
-                    Log.e("Error", "Error message", e);
-                }
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... data) {
-            if (connection == null) {
-                return null;
-            } else {
-                try {
-                    statement = connection.createStatement();
-                    resultSet = statement.executeQuery(
-                        "SELECT dbo.Coffee_rating.rating FROM dbo.Coffee_rating " +
-                                "WHERE dbo.Coffee_rating.user_id = " + globalUser.getId() +
-                                " AND dbo.Coffee_rating.coffee_shop_id = " + shop.getId()
-                    );
-
-                    while (resultSet.next()) {
-                        rating = resultSet.getFloat(1);
-                    }
-
-                } catch (Exception e) {
-                    Log.e("Error", "Error Message: ", e);
-                }
-
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException ex) {
-                Log.e("Error", "Error message", ex);
-            }
-
-            ratingBar.setRating(rating);
-            progressBar.setVisibility(ProgressBar.GONE);
-        }
-    }
-
-    private class ChangingRating extends AsyncTask<Float, Void, Void> {
-
-        private Connection connection = null;
-        private Statement statement = null;
-        private ResultSet resultSet = null;
-
-        private String password = "ROOTroot123;";
-        private String userName = "Coffee@coffeenure;";
-        private String dbName = "Coffee;";
+        private int errorCode = 0;
+        private byte[] imageData;
 
         @Override
         protected void onPreExecute() {
@@ -434,37 +374,31 @@ public class CoffeeShopActivity extends AppCompatActivity
                 connection = DriverManager.getConnection(connectionString);
             } catch (InstantiationException | IllegalAccessException |
                     ClassNotFoundException | SQLException e) {
+                errorCode = -5;
                 Log.e("Error", "Error message", e);
             }
         }
 
         @Override
-        protected Void doInBackground(Float... data) {
-            if (connection == null) {
-                return null;
-            } else {
+        protected Void doInBackground(Integer... data) {
+            if (connection != null) {
                 try {
                     statement = connection.createStatement();
-                    statement.execute("INSERT INTO dbo.Coffee_rating(" +
-                            "coffee_shop_id, user_id, rating)" +
-                            " VALUES (" + shop.getId() + ", " +
-                            globalUser.getId() + ", " +
-                            data[0] + ");");
+                    resultSet = statement.executeQuery(
+                            "SELECT pic FROM dbo.Coffee_shop " +
+                                    "WHERE id = " + data[0]
+                    );
 
-                } catch (SQLException e) {
-                    try {
-                        statement.execute("UPDATE dbo.Coffee_rating SET dbo.Coffee_rating.rating = " + data[0] +
-                        " WHERE dbo.Coffee_rating.coffee_shop_id = " + shop.getId()+
-                                " AND dbo.Coffee_rating.user_id = " + globalUser.getId());
-                    } catch (SQLException e1) {
-                        Log.e("Error", "Error Message: ", e);                    }
-                }
-                catch (Exception e) {
+                    while (resultSet.next()) {
+                        imageData = resultSet.getBytes(1);
+                    }
+
+                } catch (Exception e) {
                     Log.e("Error", "Error Message: ", e);
                 }
-
-                return null;
             }
+
+            return null;
         }
 
         @Override
@@ -481,6 +415,196 @@ public class CoffeeShopActivity extends AppCompatActivity
                 }
             } catch (SQLException ex) {
                 Log.e("Error", "Error message", ex);
+            }
+
+            imageProgressBar.setVisibility(ProgressBar.GONE);
+
+            if (errorCode == -5) {
+                Toast.makeText(
+                        CoffeeShopActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                imageView.setImageBitmap(
+                        BitmapFactory.decodeStream(
+                                new ByteArrayInputStream(imageData)
+                        )
+                );
+            }
+        }
+    }
+
+    private class LoadRating extends AsyncTask<Void, Void, Void> {
+        private Connection connection = null;
+        private Statement statement = null;
+        private ResultSet resultSet = null;
+
+        private String password = "ROOTroot123;";
+        private String userName = "Coffee@coffeenure;";
+        private String dbName = "Coffee;";
+
+        private float rating;
+        private int errorCode = 0;
+
+        @Override
+        protected void onPreExecute() {
+            String connectionString =
+                    "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
+                            + "databaseName=" + dbName
+                            + "user=" + userName
+                            + "password=" + password
+                            + "encrypt=true;"
+                            + "trustServerCertificate=false;"
+                            + "hostNameInCertificate=*.database.windows.net;"
+                            + "loginTimeout=30;";
+
+            try {
+                Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
+                connection = DriverManager.getConnection(connectionString);
+            } catch (InstantiationException | IllegalAccessException |
+                    ClassNotFoundException | SQLException e) {
+                errorCode = -5;
+                Log.e("Error", "Error message", e);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... data) {
+            if (connection != null && globalUser.getId() != -1) {
+                try {
+                    statement = connection.createStatement();
+                    resultSet = statement.executeQuery(
+                            "SELECT dbo.Coffee_rating.rating FROM dbo.Coffee_rating " +
+                                    "WHERE dbo.Coffee_rating.user_id = " + globalUser.getId() +
+                                    " AND dbo.Coffee_rating.coffee_shop_id = " + shop.getId()
+                    );
+
+                    while (resultSet.next()) {
+                        rating = resultSet.getFloat(1);
+                    }
+
+                } catch (Exception e) {
+                    Log.e("Error", "Error Message: ", e);
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException ex) {
+                Log.e("Error", "Error message", ex);
+            }
+
+            progressBar.setVisibility(ProgressBar.GONE);
+
+            if (errorCode == -5) {
+                Toast.makeText(
+                        CoffeeShopActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                ratingBar.setRating(rating);
+            }
+        }
+    }
+
+    private class ChangingRating extends AsyncTask<Float, Void, Void> {
+
+        private Connection connection = null;
+        private Statement statement = null;
+        private ResultSet resultSet = null;
+
+        private String password = "ROOTroot123;";
+        private String userName = "Coffee@coffeenure;";
+        private String dbName = "Coffee;";
+
+        private int errorCode = 0;
+
+        @Override
+        protected void onPreExecute() {
+            String connectionString =
+                    "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
+                            + "databaseName=" + dbName
+                            + "user=" + userName
+                            + "password=" + password
+                            + "encrypt=true;"
+                            + "trustServerCertificate=false;"
+                            + "hostNameInCertificate=*.database.windows.net;"
+                            + "loginTimeout=30;";
+
+            try {
+                Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
+                connection = DriverManager.getConnection(connectionString);
+            } catch (InstantiationException | IllegalAccessException |
+                    ClassNotFoundException | SQLException e) {
+                errorCode = -5;
+                Log.e("Error", "Error message", e);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Float... data) {
+            if (connection != null) {
+                try {
+                    statement = connection.createStatement();
+                    statement.execute("INSERT INTO dbo.Coffee_rating(" +
+                            "coffee_shop_id, user_id, rating)" +
+                            " VALUES (" + shop.getId() + ", " +
+                            globalUser.getId() + ", " +
+                            data[0] + ");");
+
+                } catch (SQLException e) {
+                    try {
+                        statement.execute("UPDATE dbo.Coffee_rating SET dbo.Coffee_rating.rating = " + data[0] +
+                                " WHERE dbo.Coffee_rating.coffee_shop_id = " + shop.getId() +
+                                " AND dbo.Coffee_rating.user_id = " + globalUser.getId());
+                    } catch (SQLException e1) {
+                        Log.e("Error", "Error Message: ", e);
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", "Error Message: ", e);
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException ex) {
+                Log.e("Error", "Error message", ex);
+            }
+
+            if (errorCode == -5) {
+                Toast.makeText(
+                        CoffeeShopActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
             }
         }
     }

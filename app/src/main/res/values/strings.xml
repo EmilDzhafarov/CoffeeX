@@ -32,6 +32,9 @@
     <string name="user"><u>User</u></string>
     <string name="date"><u>Date</u></string>
     <string name="last_comments"><u>Last comments</u></string>
+    <string name="subscription_details"><u>Details</u></string>
+    <string name="subscription_price">Price - </string>
+    <string name="subscription_duration">Duration(months) - </string>
     <string name="remove_user">Remove account</string>
 
 </resources>

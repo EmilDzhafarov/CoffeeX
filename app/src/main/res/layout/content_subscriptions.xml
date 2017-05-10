@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/subscriptions_progressBar"
-        style="?android:attr/progressBarStyleLarge"
+        style="?android:attr/progressBarStyle"
         app:layout_constraintBottom_toTopOf="@id/constraintLayout"
         app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
         app:layout_constraintRight_toLeftOf="@id/constraintLayout"

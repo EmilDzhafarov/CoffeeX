@@ -1,67 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:orientation="vertical"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="20dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/text_comment"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/comment_text_inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Enter your comment here..."
-            android:maxLines="3" />
+            app:errorEnabled="true">
+
+            <EditText
+                android:id="@+id/text_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your comment here..."
+                android:maxLines="3" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="end">
 
-            <Button
-                android:id="@+id/clear_comment_button"
+            <ProgressBar
+                android:id="@+id/comment_progressBar"
+                style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="Clear" />
+                android:layout_height="match_parent" />
 
             <Button
-                style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/send_comment_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@null"
                 android:text="Send" />
         </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/comment_progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_weight="1" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/comment_main_progressBar"
+        android:layout_marginTop="-100dp"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
 
     <ListView
         android:id="@+id/lvComments"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="10"
         android:divider="#5886DE"
         android:dividerHeight="1dp" />
 </LinearLayout>

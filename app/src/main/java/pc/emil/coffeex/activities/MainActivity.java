@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -261,6 +262,8 @@ public class MainActivity extends AppCompatActivity
         private String userName = "Coffee@coffeenure;";
         private String dbName = "Coffee;";
 
+        private int errorCode = 0;
+
         @Override
         protected void onPreExecute() {
             String connectionString =
@@ -278,83 +281,85 @@ public class MainActivity extends AppCompatActivity
                 connection = DriverManager.getConnection(connectionString);
             } catch (InstantiationException | IllegalAccessException |
                     ClassNotFoundException | SQLException e) {
+                errorCode = -5;
                 Log.e("Error", "Error message", e);
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(
-                        "SELECT dbo.Coffee_shop.id," +
-                                "dbo.Coffee_shop.Name," +
-                                "dbo.Coffee_shop.Phone, " +
-                                "dbo.Coffee_shop.Website, " +
-                                "dbo.Coffee_shop.Facebook," +
-                                "dbo.Coffee_shop.Instagram," +
-                                "dbo.Coffee_shop.Vkontakte," +
-                                "dbo.Address.Country, " +
-                                "dbo.Address.City, " +
-                                "dbo.Address.Street, " +
-                                "dbo.Address.Building " +
-                                "FROM dbo.Coffee_shop INNER JOIN dbo.Address " +
-                                "ON dbo.Coffee_shop.address_id=dbo.Address.id");
+            if (connection != null) {
+                try {
+                    statement = connection.createStatement();
+                    resultSet = statement.executeQuery(
+                            "SELECT dbo.Coffee_shop.id," +
+                                    "dbo.Coffee_shop.Name," +
+                                    "dbo.Coffee_shop.Phone, " +
+                                    "dbo.Coffee_shop.Website, " +
+                                    "dbo.Coffee_shop.Facebook," +
+                                    "dbo.Coffee_shop.Instagram," +
+                                    "dbo.Coffee_shop.Vkontakte," +
+                                    "dbo.Address.Country, " +
+                                    "dbo.Address.City, " +
+                                    "dbo.Address.Street, " +
+                                    "dbo.Address.Building " +
+                                    "FROM dbo.Coffee_shop INNER JOIN dbo.Address " +
+                                    "ON dbo.Coffee_shop.address_id=dbo.Address.id");
 
-                while (resultSet.next()) {
-                    int id = resultSet.getInt(1);
-                    ResultSet getCoffees = connection.createStatement().executeQuery(
-                            "SELECT dbo.Coffee.Name," +
-                            "dbo.Coffee.Price," +
-                            "dbo.Coffee.Description " +
-                            "FROM dbo.Coffee " +
-                            "WHERE coffee_shop_id=" + id
-                    );
-                    ArrayList<Coffee> coffees = new ArrayList<>();
-
-                    while (getCoffees.next()) {
-                        Coffee coffee = new Coffee(
-                                getCoffees.getString(1),
-                                getCoffees.getDouble(2),
-                                getCoffees.getString(3)
+                    while (resultSet.next()) {
+                        int id = resultSet.getInt(1);
+                        ResultSet getCoffees = connection.createStatement().executeQuery(
+                                "SELECT dbo.Coffee.Name," +
+                                        "dbo.Coffee.Price," +
+                                        "dbo.Coffee.Description " +
+                                        "FROM dbo.Coffee " +
+                                        "WHERE coffee_shop_id=" + id
                         );
-                        coffees.add(coffee);
+                        ArrayList<Coffee> coffees = new ArrayList<>();
+
+                        while (getCoffees.next()) {
+                            Coffee coffee = new Coffee(
+                                    getCoffees.getString(1),
+                                    getCoffees.getDouble(2),
+                                    getCoffees.getString(3)
+                            );
+                            coffees.add(coffee);
+                        }
+
+                        ResultSet getRating = connection.createStatement().executeQuery(
+                                "SELECT dbo.Coffee_rating.rating FROM dbo.Coffee_rating " +
+                                        "WHERE coffee_shop_id = " + id
+                        );
+
+                        float rating = 0;
+                        int count= 0;
+
+                        while (getRating.next()) {
+                            rating += getRating.getFloat(1);
+                            count++;
+                        }
+
+                        rating /= count;
+
+                        CoffeeShop shop = new CoffeeShop(
+                                id,
+                                resultSet.getString(2),
+                                resultSet.getString(3),
+                                resultSet.getString(4),
+                                resultSet.getString(5),
+                                resultSet.getString(6),
+                                resultSet.getString(7),
+                                resultSet.getString(8),
+                                resultSet.getString(9),
+                                resultSet.getString(10),
+                                resultSet.getString(11),
+                                coffees,
+                                rating);
+                        shops.add(shop);
                     }
-
-                    ResultSet getRating = connection.createStatement().executeQuery(
-                        "SELECT dbo.Coffee_rating.rating FROM dbo.Coffee_rating " +
-                                "WHERE coffee_shop_id = " + id
-                    );
-
-                    float rating = 0;
-                    int count= 0;
-
-                    while (getRating.next()) {
-                        rating += getRating.getFloat(1);
-                        count++;
-                    }
-
-                    rating /= count;
-
-                    CoffeeShop shop = new CoffeeShop(
-                            id,
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5),
-                            resultSet.getString(6),
-                            resultSet.getString(7),
-                            resultSet.getString(8),
-                            resultSet.getString(9),
-                            resultSet.getString(10),
-                            resultSet.getString(11),
-                            coffees,
-                            rating);
-                    shops.add(shop);
+                } catch (Exception e) {
+                    Log.e("Error", "Error Message: ", e);
                 }
-
-            } catch (Exception e) {
-                Log.e("Error", "Error Message: ", e);
             }
 
             return null;
@@ -376,19 +381,26 @@ public class MainActivity extends AppCompatActivity
                 Log.e("Error", "Error message", ex);
             }
 
-            listView.setAdapter(new CoffeeShopAdapter(MainActivity.this,
-                    shops.toArray(new CoffeeShop[shops.size()])));
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            progressBar.setVisibility(ProgressBar.GONE);
 
-                    Intent i = new Intent(MainActivity.this, CoffeeShopActivity.class);
-                    i.putExtra("coffee_shop", shops.get(position));
-                    startActivity(i);
-                }
-            });
-
-            MainActivity.this.progressBar.setVisibility(ProgressBar.GONE);
+            if (errorCode == -5) {
+                Toast.makeText(
+                        MainActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                listView.setAdapter(new CoffeeShopAdapter(MainActivity.this,
+                        shops.toArray(new CoffeeShop[shops.size()])));
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent i = new Intent(MainActivity.this, CoffeeShopActivity.class);
+                        i.putExtra("coffee_shop", shops.get(position));
+                        startActivity(i);
+                    }
+                });
+            }
         }
     }
 }

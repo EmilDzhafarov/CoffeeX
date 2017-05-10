@@ -1,6 +1,7 @@
 package pc.emil.coffeex.activities;
 
 import android.os.AsyncTask;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +30,10 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
 
     private ListView listView;
     private ArrayList<Comment> comments = new ArrayList<>();
-    private EditText editText;
     private CoffeeShop shop;
     private ProgressBar progressBar;
+    private ProgressBar mainProgressBar;
+    private TextInputLayout commentText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,12 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_coffee_shop_comments);
 
         Button sendButton = (Button) findViewById(R.id.send_comment_button);
-        Button clearButton = (Button) findViewById(R.id.clear_comment_button);
-        editText = (EditText) findViewById(R.id.text_comment);
+        commentText = (TextInputLayout) findViewById(R.id.comment_text_inputLayout);
+
         listView = (ListView) findViewById(R.id.lvComments);
         progressBar = (ProgressBar) findViewById(R.id.comment_progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        mainProgressBar = (ProgressBar) findViewById(R.id.comment_main_progressBar);
         Bundle extras = getIntent().getExtras();
         shop = (CoffeeShop) extras.getSerializable("coffee_shop");
 
@@ -56,7 +60,6 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
         ).start();
 
         sendButton.setOnClickListener(this);
-        clearButton.setOnClickListener(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -78,7 +81,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                             new Runnable() {
                                 @Override
                                 public void run() {
-                                    new SendComment().execute(editText.getText().toString());
+                                    new SendComment().execute(commentText.getEditText().getText().toString());
                                 }
                             }
                     ).start();
@@ -88,9 +91,6 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.clear_comment_button:
-                editText.setText("");
-                break;
         }
     }
 
@@ -98,7 +98,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
     protected void onRestart() {
         super.onRestart();
 
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        mainProgressBar.setVisibility(ProgressBar.VISIBLE);
         comments.clear();
         new Thread(
                 new Runnable() {
@@ -194,7 +194,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
 
             listView.setAdapter(new CommentsAdapter(CoffeeShopCommentsActivity.this,
                     comments.toArray(new Comment[comments.size()])));
-            progressBar.setVisibility(ProgressBar.GONE);
+            mainProgressBar.setVisibility(ProgressBar.GONE);
 
             if (comments.size() == 0) {
                 Toast.makeText(CoffeeShopCommentsActivity.this,
@@ -212,9 +212,10 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
         private String userName = "Coffee@coffeenure;";
         private String dbName = "Coffee;";
 
+        private int errorCode = 0;
+
         @Override
         protected void onPreExecute() {
-            if (globalUser.getId() != -1) {
                 String connectionString =
                         "jdbc:jtds:sqlserver://coffeenure.database.windows.net:1433;"
                                 + "databaseName=" + dbName
@@ -230,15 +231,17 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                     connection = DriverManager.getConnection(connectionString);
                 } catch (InstantiationException | IllegalAccessException |
                         ClassNotFoundException | SQLException e) {
+                    errorCode = -5;
                     Log.e("Error", "Error message", e);
                 }
-            }
         }
 
         @Override
         protected Void doInBackground(String... data) {
-            if (connection == null) {
-                return null;
+            if (data[0].isEmpty()) {
+                errorCode = 1;
+            } else if (data[0].contains("'")) {
+                errorCode = 2;
             } else {
                 try {
                     statement = connection.createStatement();
@@ -250,9 +253,9 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                 } catch (Exception e) {
                     Log.e("Error", "Error Message: ", e);
                 }
-
-                return null;
             }
+
+            return null;
         }
 
         @Override
@@ -271,9 +274,29 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                 Log.e("Error", "Error message", ex);
             }
 
-            editText.setText("");
             progressBar.setVisibility(ProgressBar.GONE);
-            CoffeeShopCommentsActivity.this.onRestart();
+
+            if (errorCode != 0) {
+                switch (errorCode) {
+                    case -5:
+                        Toast.makeText(
+                                CoffeeShopCommentsActivity.this,
+                                "Check your Internet connection and try again",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        break;
+                    case 1:
+                        commentText.setError("Comment message is empty");
+                        break;
+                    case 2:
+                        commentText.setError("Comment message doesn't contain '. Use \" instead");
+                        break;
+                }
+            } else {
+                commentText.setError(null);
+                commentText.getEditText().setText("");
+                CoffeeShopCommentsActivity.this.onRestart();
+            }
         }
     }
 }

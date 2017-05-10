@@ -48,34 +48,35 @@
             android:layout_height="wrap_content"
             android:hint="Your password" />
 
-        <Button
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sign_in_button"
-            android:text="Sign in" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="I haven't an account"/>
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/sign_in_button"
+                android:text="Sign in"
+                android:background="@null"
+                style="?android:attr/buttonBarButtonStyle"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:background="@null"
-            android:id="@+id/sign_up_button"
-            style="?android:attr/progressBarStyle"/>
+            <Button
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Sign up"
+                android:background="@null"
+                android:id="@+id/sign_up_button" />
+
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyle"/>
 
     </LinearLayout>
 

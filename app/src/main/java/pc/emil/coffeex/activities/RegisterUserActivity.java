@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -44,11 +45,12 @@ public class RegisterUserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         View.OnClickListener {
 
-    private EditText registerLogin;
-    private EditText registerPassword;
-    private EditText checkRegisterPassword;
-    private EditText registerEmail;
     private ProgressBar registerProgressBar;
+    private TextInputLayout emailInputLayout;
+    private TextInputLayout loginInputLayout;
+    private TextInputLayout passInputLayout;
+    private TextInputLayout checkPassInputLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +60,15 @@ public class RegisterUserActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.register_user_toolbar);
         setSupportActionBar(toolbar);
 
-        registerLogin = (EditText) findViewById(R.id.register_login);
-        registerPassword = (EditText) findViewById(R.id.register_password);
-        checkRegisterPassword = (EditText) findViewById(R.id.check_register_password);
-        registerEmail = (EditText) findViewById(R.id.register_email);
         registerProgressBar = (ProgressBar) findViewById(R.id.register_progressBar);
         registerProgressBar.setIndeterminate(false);
         registerProgressBar.setVisibility(ProgressBar.INVISIBLE);
+
+        emailInputLayout = (TextInputLayout) findViewById(R.id.email_inputLayout);
+        loginInputLayout = (TextInputLayout) findViewById(R.id.login_inputLayout);
+        passInputLayout = (TextInputLayout) findViewById(R.id.pass_inputLayout);
+        checkPassInputLayout = (TextInputLayout) findViewById(R.id.check_pass_inputLayout);
+
         Button registerBtn = (Button) findViewById(R.id.register_button);
         registerBtn.setOnClickListener(this);
 
@@ -106,10 +110,10 @@ public class RegisterUserActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         RegisteringUser check = new RegisteringUser();
-                        check.execute(registerLogin.getText().toString(),
-                                registerPassword.getText().toString(),
-                                checkRegisterPassword.getText().toString(),
-                                registerEmail.getText().toString());
+                        check.execute(loginInputLayout.getEditText().getText().toString(),
+                                passInputLayout.getEditText().getText().toString(),
+                                checkPassInputLayout.getEditText().getText().toString(),
+                                emailInputLayout.getEditText().getText().toString());
                     }
                 }
         ).start();
@@ -211,6 +215,7 @@ public class RegisterUserActivity extends AppCompatActivity
                 connection = DriverManager.getConnection(connectionString);
             } catch (InstantiationException | IllegalAccessException |
                     ClassNotFoundException | SQLException e) {
+                errorCode = -5;
                 Log.e("Error", "Error message", e);
             }
         }
@@ -224,17 +229,25 @@ public class RegisterUserActivity extends AppCompatActivity
             Pattern loginPattern = Pattern.compile(loginRegExp);
             Pattern emailPattern = Pattern.compile(emailRegExp, Pattern.CASE_INSENSITIVE);
 
-            if (!loginPattern.matcher(data[0]).matches()) {
+            if (data[0].isEmpty()) {
+                errorCode = -3;
+            } else if (data[1].isEmpty()) {
+                errorCode = -2;
+            } else if (data[3].isEmpty()) {
+                errorCode = -1;
+            } else if (!loginPattern.matcher(data[0]).matches()) {
                 errorCode = 1;
-            } else if (!data[1].equals(data[2])) {
+            } else if (!loginPattern.matcher(data[1]).matches()) {
                 errorCode = 2;
-            } else if (!loginPattern.matcher(data[2]).matches()) {
+            } else if (data[1].length() < 6) {
                 errorCode = 3;
-            } else if (!emailPattern.matcher(data[3]).matches()) {
+            } else if (!data[1].equals(data[2])) {
                 errorCode = 4;
+            } else if (!emailPattern.matcher(data[3]).matches()) {
+                errorCode = 5;
             }
 
-            if (errorCode == 0) {
+            if (errorCode == 0 && connection != null) {
                 try {
                     statement = connection.createStatement();
                     resultSet = statement.executeQuery(
@@ -245,10 +258,10 @@ public class RegisterUserActivity extends AppCompatActivity
 
                     while (resultSet.next()) {
                         if (resultSet.getString(1).equals(data[0])) {
-                            errorCode = 5;
+                            errorCode = 6;
                             return null;
                         } else if (resultSet.getString(3).equals(data[3])) {
-                            errorCode = 6;
+                            errorCode = 7;
                             return null;
                         }
                     }
@@ -280,45 +293,89 @@ public class RegisterUserActivity extends AppCompatActivity
                 Log.e("Error", "Error message", ex);
             }
 
-            String message = "";
+            RegisterUserActivity.this.registerProgressBar.setVisibility(ProgressBar.GONE);
 
-            switch (errorCode) {
-                case 0:
-                    break;
-                case 1:
-                    message = "Login contains invalid symbols";
-                    break;
-                case 2:
-                    message = "Passwords are not equals";
-                    break;
-                case 3:
-                    message = "Password should be consist from: a-z,A-Z,-,_,0-9";
-                    break;
-                case 4:
-                    message = "Email consists from invalid symbols";
-                    break;
-                case 5:
-                    message = "Login has already used";
-                    break;
-                case 6:
-                    message = "Email has already used";
-                    break;
-            }
-
-            if (!message.equals("")) {
-                Toast.makeText(
-                        RegisterUserActivity.this,
-                        message,
-                        Toast.LENGTH_LONG
-                ).show();
+            if (errorCode != 0) {
+                switch (errorCode) {
+                    case -5:
+                        Toast.makeText(
+                                RegisterUserActivity.this,
+                                "Check your Internet connection and try again",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        break;
+                    case -3:
+                        loginInputLayout.setError("Login is empty");
+                        emailInputLayout.setError(null);
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case -2:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError(null);
+                        passInputLayout.setError("Password is empty");
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case -1:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError("Email is empty");
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case 1:
+                        loginInputLayout.setError("Login should be made up of [A-Z, 0-9, -,_]");
+                        emailInputLayout.setError(null);
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case 2:
+                        checkPassInputLayout.setError(null);
+                        emailInputLayout.setError(null);
+                        passInputLayout.setError("Password should be made up of [A-Z, 0-9, -,_]");
+                        loginInputLayout.setError(null);
+                        break;
+                    case 3:
+                        emailInputLayout.setError(null);
+                        loginInputLayout.setError(null);
+                        passInputLayout.setError("Password should be made up from 6 symbols at least");
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case 4:
+                        emailInputLayout.setError(null);
+                        loginInputLayout.setError(null);
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError("Passwords are not equals");
+                        break;
+                    case 5:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError("Email consists from invalid symbols");
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case 6:
+                        emailInputLayout.setError(null);
+                        loginInputLayout.setError("Login has already used");
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                    case 7:
+                        emailInputLayout.setError("Email has already used");
+                        loginInputLayout.setError(null);
+                        passInputLayout.setError(null);
+                        checkPassInputLayout.setError(null);
+                        break;
+                }
             } else {
+                loginInputLayout.setError(null);
+                emailInputLayout.setError(null);
+                passInputLayout.setError(null);
+                checkPassInputLayout.setError(null);
+
                 Intent intent = new Intent(RegisterUserActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
-
-            RegisterUserActivity.this.registerProgressBar.setVisibility(ProgressBar.GONE);
         }
     }
 }

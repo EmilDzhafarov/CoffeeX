@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,69 +11,109 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
-        tools:layout_constraintLeft_creator="1"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
 
         <TextView
+            style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
             android:gravity="center_horizontal"
             android:text="Sign Up"
-            android:textSize="26dp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/register_login"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your login" />
+            app:errorEnabled="true">
 
-        <EditText
-            android:inputType="textPassword"
-            android:id="@+id/register_password"
+            <EditText
+                android:id="@+id/register_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your login" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/pass_inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your password" />
+            app:errorEnabled="true">
 
-        <EditText
-            android:inputType="textPassword"
-            android:id="@+id/check_register_password"
+            <EditText
+                android:id="@+id/register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your password"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/check_pass_inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Repeat password" />
+            app:errorEnabled="true">
 
-        <EditText
-            android:inputType="textEmailAddress"
-            android:id="@+id/register_email"
+            <EditText
+                android:id="@+id/check_register_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Repeat password"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your email" />
+            app:errorEnabled="true">
 
-        <Button
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            <EditText
+                android:id="@+id/register_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/register_button"
-            android:text="Sign Up" />
+            android:gravity="end"
+            android:orientation="horizontal">
 
-        <ProgressBar
-            android:id="@+id/register_progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <ProgressBar
+                android:id="@+id/register_progressBar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp" />
+
+            <Button
+                android:id="@+id/register_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="Sign Up" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

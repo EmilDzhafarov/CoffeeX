@@ -174,6 +174,8 @@ public class SubscriptionsActivity extends AppCompatActivity
         private String userName = "Coffee@coffeenure;";
         private String dbName = "Coffee;";
 
+        private int errorCode = 0;
+
         @Override
         protected void onPreExecute() {
             String connectionString =
@@ -191,54 +193,57 @@ public class SubscriptionsActivity extends AppCompatActivity
                 connection = DriverManager.getConnection(connectionString);
             } catch (InstantiationException | IllegalAccessException |
                     ClassNotFoundException | SQLException e) {
+                errorCode = -5;
                 Log.e("Error", "Error message", e);
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                statement = connection.createStatement();
+            if (connection != null) {
+                try {
+                    statement = connection.createStatement();
 
-                ArrayList<Integer> ids = new ArrayList<>();
-                if (globalUser.getId() != -1) {
+                    ArrayList<Integer> ids = new ArrayList<>();
+                    if (globalUser.getId() != -1) {
+                        resultSet = statement.executeQuery(
+                                "SELECT subscription_type_id FROM Users.[Subscription] " +
+                                        "WHERE user_id = " + globalUser.getId()
+                        );
+
+                        while (resultSet.next()) {
+                            ids.add(resultSet.getInt(1));
+                        }
+                    }
+
                     resultSet = statement.executeQuery(
-                            "SELECT subscription_type_id FROM Users.[Subscription] " +
-                                    "WHERE user_id = " + globalUser.getId()
+                            "SELECT Users.[Subscription_type].id," +
+                                    "Users.[Subscription_type].title," +
+                                    "Users.[Subscription_type].Duration," +
+                                    "Users.[Subscription_type].price " +
+                                    "FROM Users.[Subscription_type]"
                     );
 
                     while (resultSet.next()) {
-                        ids.add(resultSet.getInt(1));
+                        int id = resultSet.getInt(1);
+
+                        Subscription sub = new Subscription(
+                                resultSet.getInt(1),
+                                resultSet.getString(2),
+                                resultSet.getInt(3),
+                                resultSet.getDouble(4));
+
+                        if (ids.contains(id)) {
+                            sub.setBuyed(true);
+                        } else {
+                            sub.setBuyed(false);
+                        }
+
+                        subscriptions.add(sub);
                     }
+                } catch (Exception e) {
+                    Log.e("Error", "Error Message: ", e);
                 }
-
-                resultSet = statement.executeQuery(
-                        "SELECT Users.[Subscription_type].id," +
-                                "Users.[Subscription_type].title," +
-                                "Users.[Subscription_type].Duration," +
-                                "Users.[Subscription_type].price " +
-                                "FROM Users.[Subscription_type]"
-                );
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt(1);
-
-                    Subscription sub = new Subscription(
-                            resultSet.getInt(1),
-                            resultSet.getString(2),
-                            resultSet.getInt(3),
-                            resultSet.getDouble(4));
-
-                    if (ids.contains(id)) {
-                        sub.setBuyed(true);
-                    } else {
-                        sub.setBuyed(false);
-                    }
-
-                    subscriptions.add(sub);
-                }
-            } catch (Exception e) {
-                Log.e("Error", "Error Message: ", e);
             }
 
             return null;
@@ -260,9 +265,18 @@ public class SubscriptionsActivity extends AppCompatActivity
                 Log.e("Error", "Error message", ex);
             }
 
-            listView.setAdapter(new SubscriptionAdapter(SubscriptionsActivity.this,
-                    subscriptions.toArray(new Subscription[subscriptions.size()])));
             progressBar.setVisibility(ProgressBar.GONE);
+
+            if (errorCode == -5) {
+                Toast.makeText(
+                        SubscriptionsActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
+            } else {
+                listView.setAdapter(new SubscriptionAdapter(SubscriptionsActivity.this,
+                        subscriptions.toArray(new Subscription[subscriptions.size()])));
+            }
         }
     }
 }

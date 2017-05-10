@@ -188,6 +188,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private class CheckingUser extends AsyncTask<String, Void, Void> {
 
         private boolean find = false;
+        private int errorCode = 0;
 
         private Connection connection = null;
         private Statement statement = null;
@@ -214,36 +215,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 connection = DriverManager.getConnection(connectionString);
             } catch (InstantiationException | IllegalAccessException |
                     ClassNotFoundException | SQLException e) {
+                errorCode = -5;
                 Log.e("Error", "Error message", e);
             }
         }
 
         @Override
         protected Void doInBackground(String... data) {
-            try {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery(
-                        "SELECT Users.[User].id, " +
-                                "Users.[User].login, " +
-                                "Users.[User].password," +
-                                "Users.[User].email " +
-                                "FROM Users.[User]");
+            if (connection != null) {
+                try {
+                    statement = connection.createStatement();
+                    resultSet = statement.executeQuery(
+                            "SELECT Users.[User].id, " +
+                                    "Users.[User].login, " +
+                                    "Users.[User].password," +
+                                    "Users.[User].email " +
+                                    "FROM Users.[User]");
 
-                while (resultSet.next()) {
-                    if (resultSet.getString(2).equals(data[0]) &&
-                            resultSet.getString(3).equals(data[1])) {
-                        find = true;
-                        globalUser = new User(
-                                resultSet.getInt(1),
-                                resultSet.getString(2),
-                                resultSet.getString(3),
-                                resultSet.getString(4)
-                        );
-                        return null;
+                    while (resultSet.next()) {
+                        if (resultSet.getString(2).equals(data[0]) &&
+                                resultSet.getString(3).equals(data[1])) {
+                            find = true;
+                            globalUser = new User(
+                                    resultSet.getInt(1),
+                                    resultSet.getString(2),
+                                    resultSet.getString(3),
+                                    resultSet.getString(4)
+                            );
+                            return null;
+                        }
                     }
+                } catch (Exception e) {
+                    Log.e("Error", "Error Message: ", e);
                 }
-            } catch (Exception e) {
-                Log.e("Error", "Error Message: ", e);
             }
 
             return null;
@@ -265,25 +269,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.e("Error", "Error message", ex);
             }
 
-            if (find) {
-                SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-                SharedPreferences.Editor ed = sPref.edit();
-                ed.putInt(SAVED_ID, globalUser.getId());
-                ed.putString(SAVED_LOGIN, globalUser.getLogin());
-                ed.putString(SAVED_PASSWORD, globalUser.getPassword());
-                ed.putString(SAVED_EMAIL, globalUser.getEmail());
-                ed.apply();
+            progressBar.setVisibility(ProgressBar.GONE);
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+            if (errorCode == -5) {
+                Toast.makeText(
+                        LoginActivity.this,
+                        "Check your Internet connection and try again",
+                        Toast.LENGTH_LONG
+                ).show();
             } else {
-                Toast.makeText(LoginActivity.this,
-                        "User not found! Please sign up",
-                        Toast.LENGTH_LONG).show();
-            }
+                if (find) {
+                    SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                    SharedPreferences.Editor ed = sPref.edit();
+                    ed.putInt(SAVED_ID, globalUser.getId());
+                    ed.putString(SAVED_LOGIN, globalUser.getLogin());
+                    ed.putString(SAVED_PASSWORD, globalUser.getPassword());
+                    ed.putString(SAVED_EMAIL, globalUser.getEmail());
+                    ed.apply();
 
-            LoginActivity.this.progressBar.setVisibility(ProgressBar.GONE);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            "User not found! Please sign up",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 }

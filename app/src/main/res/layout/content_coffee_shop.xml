@@ -9,312 +9,328 @@
     tools:context="pc.emil.coffeex.activities.CoffeeShopActivity"
     tools:showIn="@layout/app_bar_coffee_shop">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         tools:layout_constraintTop_creator="1"
-        android:weightSum="10">
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/background_splash">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:id="@+id/coffee_shop_title"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                android:textStyle="bold|italic"
-                style="@style/Base.TextAppearance.AppCompat.Large" />
+                android:layout_height="wrap_content">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_marginTop="-3dp"
+                    android:layout_marginStart="-3dp"
+                    android:layout_marginEnd="-3dp"
+                    android:layout_marginBottom="3dp"
+                    android:src="@drawable/placeholder_transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="fitXY"
+                    android:id="@+id/coffee_shop_imageView">
+                </ImageView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+                <ProgressBar
+                    android:id="@+id/image_progressBar"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"/>
+
+
+            </RelativeLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_weight="1">
 
-                <TextView
-                    style="@style/Base.TextAppearance.AppCompat.Small"
+                <LinearLayout
+                    android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="@string/address"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp"/>
-                <TextView
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Base.TextAppearance.AppCompat.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="@string/address"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"/>
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/coffee_shop_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        style="@style/Base.TextAppearance.AppCompat.Medium"/>
+                </LinearLayout>
+
+                <Button
+                    android:text="Map"
                     android:layout_gravity="center_vertical"
-                    android:id="@+id/coffee_shop_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    style="@style/Base.TextAppearance.AppCompat.Medium"/>
-            </LinearLayout>
-
-            <Button
-                android:text="Map"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:id="@+id/map_button"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:background="@null" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phone_number"
+                    android:gravity="end|center_vertical"
+                    android:id="@+id/map_button"
                     android:textStyle="bold"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/coffee_shop_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Base.TextAppearance.AppCompat.Medium" />
-
+                    android:layout_weight="1"
+                    android:background="@null" />
             </LinearLayout>
-
-            <Button
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Call"
-                android:textStyle="bold"
-                android:id="@+id/call_button"
-                android:gravity="end|center_vertical"
-                android:layout_weight="1"
-                android:background="@null"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/web_site"
-                    android:textStyle="bold"
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/coffee_shop_site"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    style="@style/Base.TextAppearance.AppCompat.Medium" />
-
-            </LinearLayout>
-
-            <Button
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open in Browser"
-                android:textStyle="bold"
-                android:gravity="end|center_vertical"
-                android:layout_weight="1"
-                android:id="@+id/view_site_button"
-                android:background="@null" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:id="@+id/coffee_shop_fb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/fb" />
-
-            <ImageButton
-                android:id="@+id/coffee_shop_insta"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/insta" />
-
-            <ImageButton
-                android:id="@+id/coffee_shop_vk"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/vk" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-
-            <RatingBar
-                android:layout_gravity="center"
-                android:id="@+id/coffee_shop_ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="0.1" />
-
-            <ProgressBar
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginStart="15dp"
-                android:id="@+id/coffee_progressBar"
-                style="?android:attr/progressBarStyle" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0.5dp"
-            android:background="#000000"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/show_comments"
-                android:background="@null"
-                android:text="Comments"
-                android:layout_weight="1" />
 
             <View
-                android:layout_width="0.5dp"
-                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="#000000"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/phone_number"
+                        android:textStyle="bold"
+                        style="@style/Base.TextAppearance.AppCompat.Small"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/coffee_shop_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Base.TextAppearance.AppCompat.Medium" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Call"
+                    android:textStyle="bold"
+                    android:id="@+id/call_button"
+                    android:gravity="end|center_vertical"
+                    android:layout_weight="1"
+                    android:background="@null"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="#000000"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/web_site"
+                        android:textStyle="bold"
+                        style="@style/Base.TextAppearance.AppCompat.Small"
+                        android:layout_marginBottom="4dp"/>
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/coffee_shop_site"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        style="@style/Base.TextAppearance.AppCompat.Medium" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open in Browser"
+                    android:textStyle="bold"
+                    android:gravity="end|center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/view_site_button"
+                    android:background="@null" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="#000000"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:id="@+id/coffee_shop_fb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/fb" />
+
+                <ImageButton
+                    android:id="@+id/coffee_shop_insta"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/insta" />
+
+                <ImageButton
+                    android:id="@+id/coffee_shop_vk"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:src="@drawable/vk" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
                 android:background="#000000"
                 android:layout_marginBottom="4dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp" />
 
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/show_coffee_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:text="Pay here"
-                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal">
 
+                <RatingBar
+                    android:layout_gravity="center"
+                    android:id="@+id/coffee_shop_ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="0.1" />
+
+                <ProgressBar
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginStart="15dp"
+                    android:id="@+id/coffee_progressBar"
+                    style="?android:attr/progressBarStyleSmall" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="#000000"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/show_comments"
+                    android:background="@null"
+                    android:text="Comments"
+                    android:layout_weight="1" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="fill_parent"
+                    android:background="#000000"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:id="@+id/show_coffee_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:text="Pay here"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>
 

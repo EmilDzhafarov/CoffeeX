@@ -1,9 +1,10 @@
 package pc.emil.coffeex.models;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CoffeeShop implements Serializable{
+public class CoffeeShop implements Serializable {
 
     private int id;
     private String name;

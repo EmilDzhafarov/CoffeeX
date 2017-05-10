@@ -7,13 +7,14 @@
     android:id="@+id/constraintLayout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="pc.emil.coffeex.activities.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@drawable/placeholder">
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/main_progressBar"
-        style="?android:attr/progressBarStyleLarge"
+        style="?android:attr/progressBarStyle"
         app:layout_constraintBottom_toTopOf="@id/constraintLayout"
         app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
         app:layout_constraintRight_toLeftOf="@id/constraintLayout"
