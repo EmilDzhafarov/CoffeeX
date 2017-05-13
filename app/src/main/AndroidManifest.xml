@@ -18,7 +18,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="Coffee Shops"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,6 +48,11 @@
             android:name=".activities.CoffeeShopCommentsActivity"
             android:label="Comments" />
         <activity android:name=".activities.SettingsActivity" />
+        <activity
+            android:name=".activities.NewsActivity"
+            android:label="Last News"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ShowPieceOfNewsActivity"/>
     </application>
 
 </manifest>

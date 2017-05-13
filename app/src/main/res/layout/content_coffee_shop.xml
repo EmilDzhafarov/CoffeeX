@@ -45,7 +45,6 @@
                     android:layout_height="wrap_content"
                     style="@style/Base.Widget.AppCompat.ProgressBar"/>
 
-
             </RelativeLayout>
 
             <LinearLayout

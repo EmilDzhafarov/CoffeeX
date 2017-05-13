@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="pc.emil.coffeex.activities.ShowPieceOfNewsActivity"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_of_new"
+            android:text="Title"
+            android:gravity="center_horizontal"
+            style="@style/Base.TextAppearance.AppCompat.Large"/>
+
+        <TextView
+            android:text="Body"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_of_news"
+            android:textColor="@color/colorPrimary"
+            style="@style/Base.TextAppearance.AppCompat.Medium"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:id="@+id/date_time_of_news"/>
+
+    </LinearLayout>
+</ScrollView>
+
+

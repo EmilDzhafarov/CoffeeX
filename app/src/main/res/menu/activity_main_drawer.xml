@@ -7,6 +7,11 @@
             android:icon="@drawable/nav_home"
             android:title="Coffee shops" />
         <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/icon_news"
+            android:title="News"/>
+
+        <item
             android:id="@+id/nav_subscriptions"
             android:icon="@drawable/ic_menu_basket"
             android:title="Subscriptions" />

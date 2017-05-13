@@ -178,6 +178,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 finish();
             }
+        } else if (id == R.id.nav_news) {
+            Class dest = NewsActivity.class;
+            if (this.getClass() != dest) {
+                Intent intent = new Intent(this, dest);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.login_drawer_layout);
