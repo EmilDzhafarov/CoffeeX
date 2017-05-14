@@ -52,7 +52,7 @@
             android:name=".activities.NewsActivity"
             android:label="Last News"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ShowPieceOfNewsActivity"/>
+        <activity android:name=".activities.ShowPieceOfNewsActivity" />
     </application>
 
 </manifest>
