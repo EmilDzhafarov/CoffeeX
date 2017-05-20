@@ -81,7 +81,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:text="Map"
+                    android:text="@string/coffee_shop_map"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Call"
+                    android:text="@string/coffee_shop_call"
                     android:textStyle="bold"
                     android:id="@+id/call_button"
                     android:gravity="end|center_vertical"
@@ -193,7 +193,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Open in Browser"
+                    android:text="@string/coffee_shop_browser"
                     android:textStyle="bold"
                     android:gravity="end|center_vertical"
                     android:layout_weight="1"
@@ -305,7 +305,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/show_comments"
                     android:background="@null"
-                    android:text="Comments"
+                    android:text="@string/coffee_shop_comments"
                     android:layout_weight="1" />
 
                 <View
@@ -322,7 +322,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:text="Pay here"
+                    android:text="@string/coffee_shop_pay"
                     android:layout_weight="1"/>
 
             </LinearLayout>

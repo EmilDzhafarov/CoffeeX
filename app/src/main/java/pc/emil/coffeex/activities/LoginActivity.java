@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!login.equals("") &&!email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
-            item.setTitle("Sign out");
+            item.setTitle(getResources().getString(R.string.sign_out));
         }
     }
 
@@ -136,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            if (item.getTitle().equals("Sign out")) {
+            if (item.getTitle().equals(getResources().getString(R.string.sign_out))) {
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor ed = sPref.edit();
                 ed.putString(SAVED_LOGIN, "");
@@ -282,7 +282,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (errorCode == -5) {
                 Toast.makeText(
                         LoginActivity.this,
-                        "Check your Internet connection and try again",
+                        getResources().getString(R.string.check_internet),
                         Toast.LENGTH_LONG
                 ).show();
             } else {
@@ -300,7 +300,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this,
-                            "User not found! Please sign up",
+                            getResources().getString(R.string.user_not_found),
                             Toast.LENGTH_LONG).show();
                 }
             }

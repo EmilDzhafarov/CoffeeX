@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if (globalUser.getId() == -1) {
-            Toast.makeText(this, "You should be signed in!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.should_sign_in), Toast.LENGTH_SHORT).show();
         } else {
             smallProgressBar.setVisibility(View.VISIBLE);
             new Thread(
@@ -107,7 +107,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         saveChanges.setOnClickListener(this);
 
         if (globalUser.getId() == -1) {
-            textView.setText("Nothing to show");
+            textView.setText(getResources().getString(R.string.nothing_to_show));
             progressBar.setVisibility(View.INVISIBLE);
         } else {
             loginInputLayout.getEditText().setText(globalUser.getLogin());
@@ -151,7 +151,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (id == R.id.remove_user_badge) {
             if (globalUser.getId() != -1) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Are you sure to delete your profile?");
+                builder.setTitle(getResources().getString(R.string.delete_profile));
                 builder.setPositiveButton("OK", listener);
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -164,7 +164,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             } else {
                 Toast.makeText(
                         SettingsActivity.this,
-                        "You should be signed in!",
+                        getResources().getString(R.string.should_sign_in),
                         Toast.LENGTH_SHORT
                 ).show();
             }
@@ -266,11 +266,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             if (errorCode == -5) {
                 Toast.makeText(
                         SettingsActivity.this,
-                        "Check your Internet connection and try again",
+                        getResources().getString(R.string.check_internet),
                         Toast.LENGTH_LONG
                 ).show();
             } else if (subscriptions.size() == 0) {
-                textView.setText("Nothing to show");
+                textView.setText(getResources().getString(R.string.nothing_to_show));
             } else {
                 listView.setAdapter(new ActiveSubscriptionsAdapter(SettingsActivity.this,
                         subscriptions.toArray(new ActiveSubscription[subscriptions.size()])));
@@ -354,7 +354,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             if (errorCode == -5) {
                 Toast.makeText(
                         SettingsActivity.this,
-                        "Check your Internet connection and try again",
+                        getResources().getString(R.string.check_internet),
                         Toast.LENGTH_LONG
                 ).show();
             } else {
@@ -369,7 +369,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 Toast.makeText(
                         SettingsActivity.this,
-                        "User has been removed",
+                        getResources().getString(R.string.user_removed),
                         Toast.LENGTH_LONG
                 ).show();
 
@@ -517,52 +517,52 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     case -5:
                         Toast.makeText(
                                 SettingsActivity.this,
-                                "Check your Internet connection and try again",
+                                getResources().getString(R.string.check_internet),
                                 Toast.LENGTH_LONG
                         ).show();
                         break;
                     case -3:
-                        loginInputLayout.setError("Login is empty");
+                        loginInputLayout.setError(getResources().getString(R.string.empty_login));
                         emailInputLayout.setError(null);
                         passwordInputLayout.setError(null);
                         break;
                     case -2:
                         loginInputLayout.setError(null);
                         emailInputLayout.setError(null);
-                        passwordInputLayout.setError("Password is empty");
+                        passwordInputLayout.setError(getResources().getString(R.string.empty_pass));
                         break;
                     case -1:
                         loginInputLayout.setError(null);
-                        emailInputLayout.setError("Email is empty");
+                        emailInputLayout.setError(getResources().getString(R.string.empty_email));
                         passwordInputLayout.setError(null);
                         break;
                     case 1:
-                        loginInputLayout.setError("Login should be made up of [A-Z, 0-9, -,_]");
+                        loginInputLayout.setError(getResources().getString(R.string.login_should));
                         emailInputLayout.setError(null);
                         passwordInputLayout.setError(null);
                         break;
                     case 2:
                         emailInputLayout.setError(null);
-                        passwordInputLayout.setError("Password should be made up of [A-Z, 0-9, -,_]");
+                        passwordInputLayout.setError(getResources().getString(R.string.pass_should));
                         loginInputLayout.setError(null);
                         break;
                     case 3:
                         emailInputLayout.setError(null);
                         loginInputLayout.setError(null);
-                        passwordInputLayout.setError("Password should be made up from 6 symbols at least");
+                        passwordInputLayout.setError(getResources().getString(R.string.pass_made_up));
                         break;
                     case 4:
                         loginInputLayout.setError(null);
-                        emailInputLayout.setError("Email consists from invalid symbols");
+                        emailInputLayout.setError(getResources().getString(R.string.email_fail));
                         passwordInputLayout.setError(null);
                         break;
                     case 5:
                         emailInputLayout.setError(null);
-                        loginInputLayout.setError("Login has already used");
+                        loginInputLayout.setError(getResources().getString(R.string.login_used));
                         passwordInputLayout.setError(null);
                         break;
                     case 6:
-                        emailInputLayout.setError("Email has already used");
+                        emailInputLayout.setError(getResources().getString(R.string.email_used));
                         loginInputLayout.setError(null);
                         passwordInputLayout.setError(null);
                         break;
@@ -582,7 +582,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 Toast.makeText(
                         SettingsActivity.this,
-                        "Changes has been saved",
+                        getResources().getString(R.string.saved_changes),
                         Toast.LENGTH_SHORT
                 ).show();
 

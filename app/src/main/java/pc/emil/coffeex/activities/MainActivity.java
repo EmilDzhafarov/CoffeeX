@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         if (!login.equals("") &&!email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
-            item.setTitle("Sign out");
+            item.setTitle(getResources().getString(R.string.sign_out));
         }
     }
 
@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.search_badge) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Search Coffee shop");
+            builder.setTitle(getResources().getString(R.string.search_title));
 
             final EditText editText = new EditText(this);
-            editText.setHint("Enter address or name");
+            editText.setHint(getResources().getString(R.string.search_hint));
             builder.setView(editText);
             builder.setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
 
                             if (result.size() == 0) {
                                 Toast.makeText(MainActivity.this,
-                                        "Coffee shop not found\nTry again",
+                                        getResources().getString(R.string.coffee_shop_not_found),
                                         Toast.LENGTH_LONG)
                                         .show();
                             } else {
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            if (item.getTitle().equals("Sign out")) {
+            if (item.getTitle().equals(getResources().getString(R.string.sign_out))) {
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor ed = sPref.edit();
                 ed.putInt(SAVED_ID, -1);
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity
             if (errorCode == -5) {
                 Toast.makeText(
                         MainActivity.this,
-                        "Check your Internet connection and try again",
+                        getResources().getString(R.string.check_internet),
                         Toast.LENGTH_LONG
                 ).show();
             } else {

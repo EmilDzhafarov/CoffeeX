@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="Coffee Shops"
+            android:label="@string/coffee_shops"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,33 +27,35 @@
         </activity>
         <activity
             android:name=".activities.CoffeeShopActivity"
-            android:label="Coffee Shop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LoginActivity"
-            android:label="Sign In"
+            android:label="@string/login_label"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.RegisterUserActivity"
-            android:label="Sign Up"
+            android:label="@string/register_label"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SubscriptionsActivity"
-            android:label="Subscriptions"
+            android:label="@string/subscriptions_label"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CoffeeActivity"
-            android:label="Available coffee" />
+            android:label="@string/available_drinks" />
         <activity
             android:name=".activities.CoffeeShopCommentsActivity"
-            android:label="Comments" />
-        <activity android:name=".activities.SettingsActivity" />
+            android:label="@string/comments_label" />
+        <activity android:name=".activities.SettingsActivity"
+            android:label="@string/user_profile"/>
         <activity
             android:name=".activities.NewsActivity"
-            android:label="Last News"
+            android:label="@string/last_news_label"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ShowPieceOfNewsActivity" />
-        <activity android:name=".activities.SubscriptionInfoActivity"/>
+        <activity android:name=".activities.ShowPieceOfNewsActivity"
+            android:label="@string/details_label"/>
+        <activity android:name=".activities.SubscriptionInfoActivity"
+            android:label="@string/details_label"/>
     </application>
 
 </manifest>

@@ -22,12 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_of_new"
-            android:text="Title"
             android:gravity="center_horizontal"
             style="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <TextView
-            android:text="Body"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +37,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date"
+            android:text="@string/date_piece_of_news"
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:id="@+id/date_time_of_news"/>
 

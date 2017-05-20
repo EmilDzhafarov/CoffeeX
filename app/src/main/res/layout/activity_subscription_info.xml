@@ -27,7 +27,6 @@
             android:text="@string/title_description_subscription"/>
 
         <TextView
-            android:text="dsvs"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
             android:layout_width="match_parent"

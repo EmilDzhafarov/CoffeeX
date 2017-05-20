@@ -6,19 +6,13 @@
 
     <string name="action_settings">Settings</string>
     <string name="search_badge">Search</string>
-    <string name="filter_badge">Search</string>
     <string name="sign_in">Sign In</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_coffee_shop">CoffeeShopActivity</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -30,12 +24,66 @@
     <string name="phone_number"><u>Phone number</u></string>
     <string name="web_site"><u>Website</u></string>
     <string name="user"><u>User</u></string>
-    <string name="date"><u>Date</u></string>
+    <string name="date_piece_of_news"><u>Date</u></string>
     <string name="last_comments"><u>Last comments</u></string>
     <string name="subscription_details"><u>Details</u></string>
     <string name="subscription_price">Price - </string>
     <string name="subscription_duration">Duration(months) - </string>
     <string name="remove_user">Remove account</string>
     <string name="title_description_subscription"><u>Description</u></string>
+    <string name="info_btn_subscription">Info</string>
+    <string name="buy_btn_subscription">Buy</string>
+    <string name="see_all_piece_of_news">See All</string>
+    <string name="reg_user_sign_up">Sign Up</string>
+    <string name="reg_user_login">Your login</string>
+    <string name="reg_user_password">Your password</string>
+    <string name="reg_user_repeat_pass">Repeat password</string>
+    <string name="reg_user_email">Your email</string>
+    <string name="log_in_sign_in">Sign In</string>
 
+    <string name="coffee_shop_map">Map</string>
+    <string name="coffee_shop_call">Call</string>
+    <string name="coffee_shop_browser">Open in Browser</string>
+    <string name="coffee_shop_comments">Comments</string>
+    <string name="coffee_shop_pay">Pay here</string>
+    <string name="comment_user">User</string>
+    <string name="settings_save_changes">Save changes</string>
+    <string name="settings_active_subscriptions">Active subscriptions</string>
+    <string name="comment_hint">Enter your comment here&#8230;</string>
+    <string name="send_comment">Send</string>
+    <string name="active_subscriptions_price">Price (UAN)</string>
+    <string name="active_subscriptions_date">Until date</string>
+    <string name="coffee_shops">Coffee Shops</string>
+    <string name="login_label">Sign In</string>
+    <string name="register_label">Sign Up</string>
+    <string name="subscriptions_label">Subscriptions</string>
+    <string name="available_drinks">Available drinks</string>
+    <string name="comments_label">Comments</string>
+    <string name="user_profile">User profile</string>
+    <string name="last_news_label">Last News</string>
+    <string name="details_label">Details</string>
+
+    <string name="saved_changes">Changes has been saved</string>
+    <string name="user_removed">User has been removed</string>
+    <string name="delete_profile">Are you sure to delete your profile?</string>
+    <string name="email_used">Email has already used</string>
+    <string name="login_used">Login has already used</string>
+    <string name="email_fail">Email consists from invalid symbols</string>
+    <string name="pass_not_eq">Passwords are not equals</string>
+    <string name="pass_made_up">Password should be made up from 6 symbols at least</string>
+    <string name="pass_should">Password should be made up of [A-Z, 0-9, -,_]</string>
+    <string name="login_should">Login should be made up of [A-Z, 0-9, -,_]</string>
+    <string name="empty_email">Email is empty</string>
+    <string name="empty_pass">Password is empty</string>
+    <string name="empty_login">Login is empty</string>
+    <string name="search_title">Search Coffee shop</string>
+    <string name="search_hint">Enter address or name</string>
+    <string name="coffee_shop_not_found">Coffee shop not found \\nTry again</string>
+    <string name="user_not_found">User not found! Please sign up</string>
+    <string name="comment_failure">Comment message does not contain \'. Use \" instead</string>
+    <string name="comment_empty">Comment message is empty</string>
+    <string name="sign_out">Sign out</string>
+    <string name="should_sign_in">You should be signed in!</string>
+    <string name="nothing_to_show">Nothing to show</string>
+    <string name="check_internet">Check your Internet connection and try again</string>
 </resources>

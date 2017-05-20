@@ -1,0 +1,89 @@
+<resources>
+    <string name="app_name">CoffeeX</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="search_badge">Поиск</string>
+    <string name="sign_in">Войти</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">Войти</string>
+
+    <!-- Strings related to login -->
+    <string name="error_invalid_email">Этот адрес эл. почты неверный</string>
+    <string name="error_invalid_password">Пароль слишком короткий</string>
+    <string name="error_incorrect_password">Пароли не совпадают</string>
+    <string name="error_field_required">Обязательное поле</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="address"><u>Адрес</u></string>
+    <string name="phone_number"><u>Телефон</u></string>
+    <string name="web_site"><u>Вебсайт</u></string>
+    <string name="user"><u>Пользователь</u></string>
+    <string name="date_piece_of_news"><u>Дата</u></string>
+    <string name="last_comments"><u>Последние комментарии</u></string>
+    <string name="subscription_details"><u>Детали</u></string>
+    <string name="subscription_price">Цена (грн)- </string>
+    <string name="subscription_duration">Длител. (месяцы) - </string>
+    <string name="remove_user">Удалить аккаунт</string>
+    <string name="title_description_subscription"><u>Описание</u></string>
+    <string name="info_btn_subscription">Детали</string>
+    <string name="buy_btn_subscription">Купить</string>
+    <string name="see_all_piece_of_news">Дальше</string>
+    <string name="reg_user_sign_up">Зарегистрироваться</string>
+    <string name="reg_user_login">Ваш логин</string>
+    <string name="reg_user_password">Ваш пароль</string>
+    <string name="reg_user_repeat_pass">Повторите пароль</string>
+    <string name="reg_user_email">Ваш адрес электронной почты</string>
+    <string name="log_in_sign_in">Войти</string>
+
+    <string name="coffee_shop_map">Карта</string>
+    <string name="coffee_shop_call">Позвонить</string>
+    <string name="coffee_shop_browser">Открыть в браузере</string>
+    <string name="coffee_shop_comments">Комментарии</string>
+    <string name="coffee_shop_pay">Предложения</string>
+    <string name="comment_user">Пользователь</string>
+    <string name="settings_save_changes">Сохранить</string>
+    <string name="settings_active_subscriptions">Активные подписки</string>
+    <string name="comment_hint">Введите текст сообщения здесь&#8230;</string>
+    <string name="send_comment">Отправить</string>
+    <string name="active_subscriptions_price">Цена (грн)</string>
+    <string name="active_subscriptions_date">Действ. до</string>
+    <string name="coffee_shops">Кофейни</string>
+    <string name="login_label">Войти</string>
+    <string name="register_label">Зарегистрироваться</string>
+    <string name="subscriptions_label">Подписки</string>
+    <string name="available_drinks">Доступные напитки</string>
+    <string name="comments_label">Комментарии</string>
+    <string name="user_profile">Профиль</string>
+    <string name="last_news_label">Новости</string>
+    <string name="details_label">Детали</string>
+
+    <string name="saved_changes">Изменения были сохранены</string>
+    <string name="user_removed">Пользователь был удален</string>
+    <string name="delete_profile">Вы действительно хотите удалить профиль?</string>
+    <string name="email_used">Адрес электронной почты уже используется</string>
+    <string name="login_used">Логин уже используется</string>
+    <string name="email_fail">Неверный адрес электронной почты</string>
+    <string name="pass_not_eq">Пароли не совпадают</string>
+    <string name="pass_made_up">Пароль должен состоять как минимум из 6 символов</string>
+    <string name="pass_should">Пароль должен состоять из [A-Z, 0-9, -,_]</string>
+    <string name="login_should">Догин должен состоять из [A-Z, 0-9, -,_]</string>
+    <string name="empty_email">Адрес электронной почты пуст</string>
+    <string name="empty_pass">Пароль пуст</string>
+    <string name="empty_login">Логин пуст</string>
+    <string name="search_title">Поиск кофеен</string>
+    <string name="search_hint">Введите адрес или название</string>
+    <string name="coffee_shop_not_found">Кофейня не найдена \\nПопробуйте снова</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="comment_failure">Комментарий не должен содержать \'. Используйте \" </string>
+    <string name="comment_empty">Комментарий пуст. Введите текст</string>
+    <string name="sign_out">Выйти</string>
+    <string name="should_sign_in">Вы должны войти!</string>
+    <string name="nothing_to_show">Ничего не найдено</string>
+    <string name="check_internet">Проверьте Ваше соединение с Интернетом и попробуйте снова</string>
+</resources>

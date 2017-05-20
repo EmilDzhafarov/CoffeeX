@@ -99,7 +99,7 @@ public class RegisterUserActivity extends AppCompatActivity
         if (!login.equals("") &&!email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
-            item.setTitle("Sign out");
+            item.setTitle(getResources().getString(R.string.sign_out));
         }
     }
 
@@ -137,7 +137,7 @@ public class RegisterUserActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            if (item.getTitle().equals("Sign out")) {
+            if (item.getTitle().equals(getResources().getString(R.string.sign_out))) {
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor ed = sPref.edit();
                 ed.putInt(SAVED_ID, -1);
@@ -308,12 +308,12 @@ public class RegisterUserActivity extends AppCompatActivity
                     case -5:
                         Toast.makeText(
                                 RegisterUserActivity.this,
-                                "Check your Internet connection and try again",
+                                getResources().getString(R.string.check_internet),
                                 Toast.LENGTH_LONG
                         ).show();
                         break;
                     case -3:
-                        loginInputLayout.setError("Login is empty");
+                        loginInputLayout.setError(getResources().getString(R.string.empty_login));
                         emailInputLayout.setError(null);
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
@@ -321,17 +321,17 @@ public class RegisterUserActivity extends AppCompatActivity
                     case -2:
                         loginInputLayout.setError(null);
                         emailInputLayout.setError(null);
-                        passInputLayout.setError("Password is empty");
+                        passInputLayout.setError(getResources().getString(R.string.empty_pass));
                         checkPassInputLayout.setError(null);
                         break;
                     case -1:
                         loginInputLayout.setError(null);
-                        emailInputLayout.setError("Email is empty");
+                        emailInputLayout.setError(getResources().getString(R.string.empty_email));
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
                         break;
                     case 1:
-                        loginInputLayout.setError("Login should be made up of [A-Z, 0-9, -,_]");
+                        loginInputLayout.setError(getResources().getString(R.string.login_should));
                         emailInputLayout.setError(null);
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
@@ -339,35 +339,35 @@ public class RegisterUserActivity extends AppCompatActivity
                     case 2:
                         checkPassInputLayout.setError(null);
                         emailInputLayout.setError(null);
-                        passInputLayout.setError("Password should be made up of [A-Z, 0-9, -,_]");
+                        passInputLayout.setError(getResources().getString(R.string.pass_should));
                         loginInputLayout.setError(null);
                         break;
                     case 3:
                         emailInputLayout.setError(null);
                         loginInputLayout.setError(null);
-                        passInputLayout.setError("Password should be made up from 6 symbols at least");
+                        passInputLayout.setError(getResources().getString(R.string.pass_made_up));
                         checkPassInputLayout.setError(null);
                         break;
                     case 4:
                         emailInputLayout.setError(null);
                         loginInputLayout.setError(null);
                         passInputLayout.setError(null);
-                        checkPassInputLayout.setError("Passwords are not equals");
+                        checkPassInputLayout.setError(getResources().getString(R.string.pass_not_eq));
                         break;
                     case 5:
                         loginInputLayout.setError(null);
-                        emailInputLayout.setError("Email consists from invalid symbols");
+                        emailInputLayout.setError(getResources().getString(R.string.email_fail));
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
                         break;
                     case 6:
                         emailInputLayout.setError(null);
-                        loginInputLayout.setError("Login has already used");
+                        loginInputLayout.setError(getResources().getString(R.string.login_used));
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
                         break;
                     case 7:
-                        emailInputLayout.setError("Email has already used");
+                        emailInputLayout.setError(getResources().getString(R.string.email_used));
                         loginInputLayout.setError(null);
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);

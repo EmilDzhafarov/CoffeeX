@@ -51,8 +51,8 @@ public class ActiveSubscriptionsAdapter extends BaseAdapter {
         TextView untilDate = (TextView) vi.findViewById(R.id.active_subscription_until_date);
 
         title.setText(data[position].getTitle());
-        price.setText(String.format(Locale.ENGLISH, "Price: %.2f",data[position].getPrice()));
-        untilDate.setText(String.format(Locale.ENGLISH, "Active until: %s", data[position].getUntilDate()));
+        price.setText(String.format(Locale.ENGLISH, context.getResources().getString(R.string.active_subscriptions_price) + ": %.2f",data[position].getPrice()));
+        untilDate.setText(String.format(Locale.ENGLISH, context.getResources().getString(R.string.active_subscriptions_date) + ": %s", data[position].getUntilDate()));
 
         return vi;
     }

@@ -31,22 +31,22 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:gravity="center_horizontal"
-            android:text="Sign In"
-            android:textSize="26dp"
+            android:text="@string/log_in_sign_in"
+            style="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your login" />
+            android:hint="@string/reg_user_login" />
 
         <EditText
             android:inputType="textPassword"
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Your password" />
+            android:hint="@string/reg_user_password" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/sign_in_button"
-                android:text="Sign in"
+                android:text="@string/log_in_sign_in"
                 android:background="@null"
                 style="?android:attr/buttonBarButtonStyle"/>
 
@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Sign up"
+                android:text="@string/reg_user_sign_up"
                 android:background="@null"
                 android:id="@+id/sign_up_button" />
 

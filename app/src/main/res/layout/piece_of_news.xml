@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/news_title"
-        android:text="Title"
         android:layout_weight="1"
         style="@style/Base.TextAppearance.AppCompat.Large"
         android:gravity="center_horizontal"/>
@@ -31,7 +30,6 @@
         android:layout_height="wrap_content"
         android:maxLines="3"
         android:ellipsize="end"
-        android:text="Text"
         android:layout_weight="1"
         android:textColor="@color/colorPrimary" />
 
@@ -47,7 +45,7 @@
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date"
+            android:text="@string/date_piece_of_news"
             android:textStyle="bold" />
 
         <TextView
@@ -55,8 +53,7 @@
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="date_time" />
+            android:layout_weight="1" />
 
         <Button
             android:layout_weight="1"
@@ -66,6 +63,6 @@
             android:layout_height="wrap_content"
             android:background="@null"
             style="?android:attr/buttonBarButtonStyle"
-            android:text="See All" />
+            android:text="@string/see_all_piece_of_news" />
     </LinearLayout>
 </LinearLayout>

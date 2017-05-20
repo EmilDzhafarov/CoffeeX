@@ -94,7 +94,7 @@ public class SubscriptionAdapter extends BaseAdapter {
                 if (globalUser.getId() == -1) {
                     Toast.makeText(
                             vi.getContext(),
-                            "You should be signed in!",
+                            vi.getResources().getString(R.string.should_sign_in),
                             Toast.LENGTH_SHORT
                     ).show();
                 } else {

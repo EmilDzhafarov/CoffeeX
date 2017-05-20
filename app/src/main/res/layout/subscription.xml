@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Info"
+            android:text="@string/info_btn_subscription"
             android:id="@+id/details_button"
             android:background="@null"/>
 
@@ -40,7 +40,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/subscription_title"
-                android:text="Title"
                 style="@style/Base.TextAppearance.AppCompat.Large"/>
 
             <LinearLayout
@@ -92,7 +91,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buy"
+            android:text="@string/buy_btn_subscription"
             android:id="@+id/buy_button"
             style="?android:attr/buttonBarButtonStyle"/>
 

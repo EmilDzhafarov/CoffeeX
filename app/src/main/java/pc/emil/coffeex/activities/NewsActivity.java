@@ -95,7 +95,7 @@ public class NewsActivity extends AppCompatActivity
         if (!login.equals("") &&!email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
-            item.setTitle("Sign out");
+            item.setTitle(getResources().getString(R.string.sign_out));
         }
     }
 
@@ -106,7 +106,7 @@ public class NewsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.sign_in_item) {
-            if (item.getTitle().equals("Sign out")) {
+            if (item.getTitle().equals(getResources().getString(R.string.sign_out))) {
                 SharedPreferences sPref = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor ed = sPref.edit();
                 ed.putInt(SAVED_ID, -1);
@@ -249,7 +249,7 @@ public class NewsActivity extends AppCompatActivity
             if (errorCode == -5) {
                 Toast.makeText(
                          NewsActivity.this,
-                        "Check your Internet connection and try again",
+                        getResources().getString(R.string.check_internet),
                         Toast.LENGTH_LONG
                 ).show();
             } else {

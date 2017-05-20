@@ -87,7 +87,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                     ).start();
                 } else {
                     Toast.makeText(CoffeeShopCommentsActivity.this,
-                            "You should be signed in!",
+                           getResources().getString(R.string.should_sign_in),
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -198,7 +198,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
 
             if (comments.size() == 0) {
                 Toast.makeText(CoffeeShopCommentsActivity.this,
-                        "Nothing to show", Toast.LENGTH_SHORT).show();
+                        getResources().getString(R.string.nothing_to_show), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -281,15 +281,15 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
                     case -5:
                         Toast.makeText(
                                 CoffeeShopCommentsActivity.this,
-                                "Check your Internet connection and try again",
+                                getResources().getString(R.string.check_internet),
                                 Toast.LENGTH_LONG
                         ).show();
                         break;
                     case 1:
-                        commentText.setError("Comment message is empty");
+                        commentText.setError(getResources().getString(R.string.comment_empty));
                         break;
                     case 2:
-                        commentText.setError("Comment message doesn't contain '. Use \" instead");
+                        commentText.setError(getResources().getString(R.string.comment_failure));
                         break;
                 }
             } else {

@@ -9,7 +9,6 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp">
 
-
     <TextView
         android:id="@+id/comment_text"
         style="@style/Base.TextAppearance.AppCompat.Medium"
@@ -18,8 +17,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
-        android:text="Text" />
+        android:textColor="@color/colorPrimary" />
 
 
     <LinearLayout
@@ -39,15 +37,14 @@
                 style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/date"
+                android:text="@string/date_piece_of_news"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/comment_date_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="date_time" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="User" />
+                android:text="@string/comment_user" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

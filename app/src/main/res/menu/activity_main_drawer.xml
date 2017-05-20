@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_coffee_shops"
             android:icon="@drawable/nav_home"
-            android:title="Coffee shops" />
+            android:title="@string/coffee_shops" />
         <item
             android:id="@+id/nav_news"
             android:icon="@drawable/icon_news"
-            android:title="News"/>
+            android:title="@string/last_news_label"/>
 
         <item
             android:id="@+id/nav_subscriptions"
             android:icon="@drawable/ic_menu_basket"
-            android:title="Subscriptions" />
+            android:title="@string/subscriptions_label" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="User profile" />
+            android:title="@string/user_profile" />
         <item
             android:id="@+id/sign_in_item"
             android:icon="@drawable/sign_in_item"
