@@ -1,6 +1,7 @@
 package pc.emil.coffeex.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,14 +18,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Locale;
 
 import pc.emil.coffeex.R;
-import pc.emil.coffeex.activities.SettingsActivity;
+import pc.emil.coffeex.activities.SubscriptionInfoActivity;
 import pc.emil.coffeex.activities.SubscriptionsActivity;
-import pc.emil.coffeex.models.ActiveSubscription;
-import pc.emil.coffeex.models.CoffeeShop;
 import pc.emil.coffeex.models.Subscription;
 
 import static pc.emil.coffeex.activities.LoginActivity.globalUser;
@@ -69,6 +67,7 @@ public class SubscriptionAdapter extends BaseAdapter {
         TextView duration = (TextView) vi.findViewById(R.id.subscription_duration);
         TextView price = (TextView) vi.findViewById(R.id.subscription_price);
         final Button buyBtn = (Button) vi.findViewById(R.id.buy_button);
+        final Button infoBtn = (Button) vi.findViewById(R.id.details_button);
 
         title.setText(data[position].getTitle());
         duration.setText(String.valueOf(data[position].getDuration()));
@@ -79,6 +78,15 @@ public class SubscriptionAdapter extends BaseAdapter {
         } else {
             buyBtn.setEnabled(true);
         }
+
+        infoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SubscriptionInfoActivity.class);
+                intent.putExtra("subscription_info", data[position]);
+                context.startActivity(intent);
+            }
+        });
 
         buyBtn.setOnClickListener(new View.OnClickListener() {
             @Override

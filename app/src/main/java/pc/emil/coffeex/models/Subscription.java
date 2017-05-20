@@ -8,13 +8,15 @@ public class Subscription implements Serializable {
     private String title;
     private int duration;
     private double price;
+    private String description;
     private boolean isBuyed;
 
-    public Subscription(int id, String title, int duration, double price) {
+    public Subscription(int id, String title, int duration, double price, String description) {
         this.id = id;
         this.title = title;
         this.duration = duration;
         this.price = price;
+        this.description = description;
     }
 
     public void setBuyed(boolean buyed) {
@@ -39,5 +41,9 @@ public class Subscription implements Serializable {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

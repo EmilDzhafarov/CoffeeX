@@ -228,7 +228,8 @@ public class SubscriptionsActivity extends AppCompatActivity
                             "SELECT Users.[Subscription_type].id," +
                                     "Users.[Subscription_type].title," +
                                     "Users.[Subscription_type].Duration," +
-                                    "Users.[Subscription_type].price " +
+                                    "Users.[Subscription_type].price, " +
+                                    "Users.[Subscription_type].Description " +
                                     "FROM Users.[Subscription_type]"
                     );
 
@@ -239,7 +240,8 @@ public class SubscriptionsActivity extends AppCompatActivity
                                 resultSet.getInt(1),
                                 resultSet.getString(2),
                                 resultSet.getInt(3),
-                                resultSet.getDouble(4));
+                                resultSet.getDouble(4),
+                                resultSet.getString(5));
 
                         if (ids.contains(id)) {
                             sub.setBuyed(true);
