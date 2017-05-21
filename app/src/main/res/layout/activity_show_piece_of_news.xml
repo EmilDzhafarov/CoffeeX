@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="pc.emil.coffeex.activities.ShowPieceOfNewsActivity"
-    android:background="@drawable/placeholder"
     >
 
     <LinearLayout

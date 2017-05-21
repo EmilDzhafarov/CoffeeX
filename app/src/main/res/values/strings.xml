@@ -34,12 +34,12 @@
     <string name="info_btn_subscription">Info</string>
     <string name="buy_btn_subscription">Buy</string>
     <string name="see_all_piece_of_news">See All</string>
-    <string name="reg_user_sign_up">Sign Up</string>
+    <string name="reg_user_sign_up">Sign up</string>
     <string name="reg_user_login">Your login</string>
     <string name="reg_user_password">Your password</string>
     <string name="reg_user_repeat_pass">Repeat password</string>
     <string name="reg_user_email">Your email</string>
-    <string name="log_in_sign_in">Sign In</string>
+    <string name="log_in_sign_in">Sign in</string>
 
     <string name="coffee_shop_map">Map</string>
     <string name="coffee_shop_call">Call</string>
@@ -54,7 +54,7 @@
     <string name="active_subscriptions_price">Price (UAN)</string>
     <string name="active_subscriptions_date">Until date</string>
     <string name="coffee_shops">Coffee Shops</string>
-    <string name="login_label">Sign In</string>
+    <string name="login_label">Sign in</string>
     <string name="register_label">Sign Up</string>
     <string name="subscriptions_label">Subscriptions</string>
     <string name="available_drinks">Available drinks</string>

@@ -42,7 +42,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/date_piece_of_news"
@@ -56,13 +55,12 @@
             android:layout_weight="1" />
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/see_all_btn"
-            android:gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@null"
-            style="?android:attr/buttonBarButtonStyle"
+            android:gravity="end"
             android:text="@string/see_all_piece_of_news" />
     </LinearLayout>
 </LinearLayout>

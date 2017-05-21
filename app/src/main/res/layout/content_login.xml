@@ -27,48 +27,62 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            style="@style/Base.TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
             android:text="@string/log_in_sign_in"
-            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:textAllCaps="false"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/reg_user_login" />
+            android:hint="@string/reg_user_login"
+            android:textColor="@android:color/black" />
 
         <EditText
-            android:inputType="textPassword"
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/reg_user_password" />
+            android:fontFamily="sans-serif"
+            android:hint="@string/reg_user_password"
+            android:inputType="textPassword"
+            android:textColor="@android:color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <Button
-                android:layout_weight="1"
+                android:id="@+id/sign_in_button"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/sign_in_button"
-                android:text="@string/log_in_sign_in"
-                android:background="@null"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:layout_weight="1"
+                android:text="@string/log_in_sign_in" />
+
+            <View
+                android:layout_width="0.8dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="#000000" />
 
             <Button
-                android:layout_weight="1"
+                android:id="@+id/sign_up_button"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/reg_user_sign_up"
-                android:background="@null"
-                android:id="@+id/sign_up_button" />
+                android:layout_weight="1"
+                android:text="@string/reg_user_sign_up" />
 
         </LinearLayout>
 
@@ -76,6 +90,7 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             style="?android:attr/progressBarStyle"/>
 
     </LinearLayout>
