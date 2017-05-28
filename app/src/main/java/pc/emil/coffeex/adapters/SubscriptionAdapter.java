@@ -1,7 +1,7 @@
 package pc.emil.coffeex.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,6 @@ import java.sql.Statement;
 import java.util.Locale;
 
 import pc.emil.coffeex.R;
-import pc.emil.coffeex.activities.SubscriptionInfoActivity;
 import pc.emil.coffeex.activities.SubscriptionsActivity;
 import pc.emil.coffeex.models.Subscription;
 
@@ -55,7 +55,7 @@ public class SubscriptionAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         final View vi;
         if (convertView == null) {
             vi = inflater.inflate(R.layout.subscription, null);
@@ -82,9 +82,17 @@ public class SubscriptionAdapter extends BaseAdapter {
         infoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, SubscriptionInfoActivity.class);
-                intent.putExtra("subscription_info", data[position]);
-                context.startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                TextView textView = new TextView(context);
+                textView.setPadding(40,40,40,40);
+                textView.setTextSize(20);
+                textView.setText(data[position].getDescription());
+
+                ScrollView scrollView = new ScrollView(context);
+                scrollView.addView(textView);
+                builder.setView(scrollView);
+                builder.setCancelable(true);
+                builder.show();
             }
         });
 

@@ -63,6 +63,7 @@
     <string name="last_news_label">Last News</string>
     <string name="details_label">Details</string>
 
+    <string name="menu_title">Menu</string>
     <string name="saved_changes">Changes has been saved</string>
     <string name="user_removed">User has been removed</string>
     <string name="delete_profile">Are you sure to delete your profile?</string>
@@ -86,4 +87,5 @@
     <string name="should_sign_in">You should be signed in!</string>
     <string name="nothing_to_show">Nothing to show</string>
     <string name="check_internet">Check your Internet connection and try again</string>
+    <string name="done">Next</string>
 </resources>

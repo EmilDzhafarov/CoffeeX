@@ -17,8 +17,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/coffee_shops"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,35 +27,35 @@
         </activity>
         <activity
             android:name=".activities.CoffeeShopActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/login_label"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.RegisterUserActivity"
             android:label="@string/register_label"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.SubscriptionsActivity"
             android:label="@string/subscriptions_label"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.CoffeeActivity"
-            android:label="@string/available_drinks" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.CoffeeShopCommentsActivity"
-            android:label="@string/comments_label" />
+            android:label="@string/comments_label"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activities.SettingsActivity"
-            android:label="@string/user_profile"/>
+            android:label="@string/user_profile"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.NewsActivity"
             android:label="@string/last_news_label"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.ShowPieceOfNewsActivity"
-            android:label="@string/details_label"/>
-        <activity android:name=".activities.SubscriptionInfoActivity"
-            android:label="@string/details_label"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -1,18 +1,21 @@
 package pc.emil.coffeex.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
+import android.text.style.TextAppearanceSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import pc.emil.coffeex.R;
-import pc.emil.coffeex.activities.CoffeeShopActivity;
-import pc.emil.coffeex.activities.MainActivity;
-import pc.emil.coffeex.activities.ShowPieceOfNewsActivity;
 import pc.emil.coffeex.models.PieceOfNews;
 
 public class NewsAdapter extends BaseAdapter {
@@ -42,7 +45,7 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View vi = convertView;
         if (vi == null) {
             vi = inflater.inflate(R.layout.piece_of_news, null);
@@ -60,9 +63,29 @@ public class NewsAdapter extends BaseAdapter {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(context, ShowPieceOfNewsActivity.class);
-                        i.putExtra("piece_of_news", data[position]);
-                        context.startActivity(i);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        LinearLayout layout = new LinearLayout(context);
+                        layout.setOrientation(LinearLayout.VERTICAL);
+
+                        TextView title = new TextView(context);
+                        title.setPadding(40,40,40,40);
+                        title.setTextSize(24);
+                        title.setText(data[position].getTitle());
+
+                        TextView text = new TextView(context);
+                        text.setPadding(40,40,40,40);
+                        text.setTextSize(20);
+                        text.setText(data[position].getText());
+                        layout.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
+                        layout.addView(title);
+                        layout.addView(text);
+
+                        ScrollView scrollView = new ScrollView(context);
+                        scrollView.addView(layout);
+                        builder.setView(scrollView);
+                        builder.setCancelable(true);
+                        builder.show();
                     }
                 }
         );

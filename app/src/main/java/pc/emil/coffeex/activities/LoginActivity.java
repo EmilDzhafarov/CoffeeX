@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,6 +31,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import pc.emil.coffeex.R;
 import pc.emil.coffeex.models.User;
@@ -37,9 +39,11 @@ import pc.emil.coffeex.models.User;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener{
 
-    private EditText logEd;
-    private EditText passEd;
+    private TextInputLayout logEd;
+    private TextInputLayout passEd;
     private ProgressBar progressBar;
+
+
     public static final String SAVED_LOGIN = "saved_login";
     public static final String SAVED_PASSWORD = "saved_password";
     public static final String SAVED_EMAIL = "saved_email";
@@ -57,8 +61,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Button signUp = (Button) findViewById(R.id.sign_up_button);
         signUp.setOnClickListener(this);
 
-        logEd = (EditText) findViewById(R.id.login);
-        passEd = (EditText) findViewById(R.id.password);
+        logEd = (TextInputLayout) findViewById(R.id.login_inputLayout);
+        passEd = (TextInputLayout) findViewById(R.id.pass_inputLayout);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setIndeterminate(false);
         progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -97,20 +101,70 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private int checkInSignIn(String login, String password) {
+        String loginPassRegExp = "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$";
+        Pattern loginPassPattern = Pattern.compile(loginPassRegExp);
+
+        if (login.isEmpty()) {
+            return 1;
+        } else if (password.isEmpty()) {
+            return 2;
+        } else if (!loginPassPattern.matcher(login).matches()) {
+            return 3;
+        } else if (!loginPassPattern.matcher(password).matches()) {
+            return 4;
+        } else {
+            return 0;
+        }
+    }
+
+    private void signIn() {
+        final String login = logEd.getEditText().getText().toString();
+        final  String password =  passEd.getEditText().getText().toString();
+        int resultCode = checkInSignIn(login, password);
+
+        if (resultCode == 0) {
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            CheckingUser check = new CheckingUser();
+                            check.execute(login, password);
+                        }
+                    }
+            ).start();
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+
+        } else {
+            switch (resultCode) {
+                case 1:
+                    logEd.setError(getResources().getString(R.string.empty_login));
+                    passEd.setError(null);
+                    break;
+                case 2:
+                    passEd.setError(getResources().getString(R.string.empty_pass));
+                    logEd.setError(null);
+                    break;
+                case 3:
+                    logEd.setError(getResources().getString(R.string.login_should));
+                    passEd.setError(null);
+                    break;
+                case 4:
+                    passEd.setError(getResources().getString(R.string.pass_should));
+                    logEd.setError(null);
+                    break;
+                default:
+                    logEd.setError(null);
+                    passEd.setError(null);
+            }
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.sign_in_button :
-                new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                CheckingUser check = new CheckingUser();
-                                check.execute(logEd.getText().toString(), passEd.getText().toString());
-                            }
-                        }
-                ).start();
-                progressBar.setVisibility(ProgressBar.VISIBLE);
+                signIn();
                 break;
             case R.id.sign_up_button :
                 Intent intent = new Intent(this, RegisterUserActivity.class);

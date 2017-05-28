@@ -96,28 +96,117 @@ public class RegisterUserActivity extends AppCompatActivity
         userLogin.setText(login);
         userEmail.setText(email);
 
-        if (!login.equals("") &&!email.equals("")) {
+        if (!login.equals("") && !email.equals("")) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
             item.setTitle(getResources().getString(R.string.sign_out));
         }
     }
 
+    private int validateData(String login, String password, String password2, String email) {
+        String loginRegExp = "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$";
+        String emailRegExp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+
+        Pattern loginPattern = Pattern.compile(loginRegExp);
+        Pattern emailPattern = Pattern.compile(emailRegExp, Pattern.CASE_INSENSITIVE);
+
+        if (login.isEmpty()) {
+            return 1;
+        } else if (!loginPattern.matcher(login).matches()) {
+            return 2;
+        } else if (password.isEmpty()) {
+            return 3;
+        } else if (!loginPattern.matcher(password).matches()) {
+            return 4;
+        } else if (password.length() < 6) {
+            return 5;
+        } else if (!password.equals(password2)) {
+            return 6;
+        } else if (email.isEmpty()) {
+            return 7;
+        } else if (!emailPattern.matcher(email).matches()) {
+            return 8;
+        } else {
+            return 0;
+        }
+    }
+
     @Override
     public void onClick(View view) {
-        new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        RegisteringUser check = new RegisteringUser();
-                        check.execute(loginInputLayout.getEditText().getText().toString(),
-                                passInputLayout.getEditText().getText().toString(),
-                                checkPassInputLayout.getEditText().getText().toString(),
-                                emailInputLayout.getEditText().getText().toString());
+        final String login = loginInputLayout.getEditText().getText().toString();
+        final String password = passInputLayout.getEditText().getText().toString();
+        final String password2 = checkPassInputLayout.getEditText().getText().toString();
+        final String email = emailInputLayout.getEditText().getText().toString();
+        int resultCode = validateData(login, password, password2, email);
+
+        if (resultCode == 0) {
+            new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            RegisteringUser check = new RegisteringUser();
+                            check.execute(login, password, password2, email);
+                        }
                     }
-                }
-        ).start();
-        registerProgressBar.setVisibility(ProgressBar.VISIBLE);
+            ).start();
+            registerProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            switch (resultCode) {
+                case 1:
+                    loginInputLayout.setError(getResources().getString(R.string.empty_login));
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(null);
+                    break;
+                case 2:
+                    loginInputLayout.setError(getResources().getString(R.string.login_should));
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(null);
+                    break;
+                case 3:
+                    loginInputLayout.setError(null);
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(getResources().getString(R.string.empty_pass));
+                    checkPassInputLayout.setError(null);
+                    break;
+                case 4:
+                    loginInputLayout.setError(null);
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(getResources().getString(R.string.pass_should));
+                    checkPassInputLayout.setError(null);
+                    break;
+                case 5:
+                    checkPassInputLayout.setError(null);
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(getResources().getString(R.string.pass_made_up));
+                    loginInputLayout.setError(null);
+                    break;
+                case 6:
+                    emailInputLayout.setError(null);
+                    loginInputLayout.setError(null);
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(getResources().getString(R.string.pass_not_eq));
+                    break;
+                case 7:
+                    emailInputLayout.setError(getResources().getString(R.string.empty_email));
+                    loginInputLayout.setError(null);
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(null);
+                    break;
+                case 8:
+                    loginInputLayout.setError(null);
+                    emailInputLayout.setError(getResources().getString(R.string.email_fail));
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(null);
+                    break;
+                default:
+                    loginInputLayout.setError(null);
+                    emailInputLayout.setError(null);
+                    passInputLayout.setError(null);
+                    checkPassInputLayout.setError(null);
+            }
+        }
     }
 
     @Override
@@ -230,32 +319,7 @@ public class RegisterUserActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(String... data) {
-
-            String loginRegExp = "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$";
-            String emailRegExp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-
-            Pattern loginPattern = Pattern.compile(loginRegExp);
-            Pattern emailPattern = Pattern.compile(emailRegExp, Pattern.CASE_INSENSITIVE);
-
-            if (data[0].isEmpty()) {
-                errorCode = -3;
-            } else if (data[1].isEmpty()) {
-                errorCode = -2;
-            } else if (data[3].isEmpty()) {
-                errorCode = -1;
-            } else if (!loginPattern.matcher(data[0]).matches()) {
-                errorCode = 1;
-            } else if (!loginPattern.matcher(data[1]).matches()) {
-                errorCode = 2;
-            } else if (data[1].length() < 6) {
-                errorCode = 3;
-            } else if (!data[1].equals(data[2])) {
-                errorCode = 4;
-            } else if (!emailPattern.matcher(data[3]).matches()) {
-                errorCode = 5;
-            }
-
-            if (errorCode == 0 && connection != null) {
+            if (connection != null) {
                 try {
                     statement = connection.createStatement();
                     resultSet = statement.executeQuery(
@@ -266,10 +330,10 @@ public class RegisterUserActivity extends AppCompatActivity
 
                     while (resultSet.next()) {
                         if (resultSet.getString(1).equals(data[0])) {
-                            errorCode = 6;
+                            errorCode = 9;
                             return null;
                         } else if (resultSet.getString(3).equals(data[3])) {
-                            errorCode = 7;
+                            errorCode = 10;
                             return null;
                         }
                     }
@@ -312,61 +376,13 @@ public class RegisterUserActivity extends AppCompatActivity
                                 Toast.LENGTH_LONG
                         ).show();
                         break;
-                    case -3:
-                        loginInputLayout.setError(getResources().getString(R.string.empty_login));
-                        emailInputLayout.setError(null);
-                        passInputLayout.setError(null);
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case -2:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(null);
-                        passInputLayout.setError(getResources().getString(R.string.empty_pass));
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case -1:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(getResources().getString(R.string.empty_email));
-                        passInputLayout.setError(null);
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case 1:
-                        loginInputLayout.setError(getResources().getString(R.string.login_should));
-                        emailInputLayout.setError(null);
-                        passInputLayout.setError(null);
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case 2:
-                        checkPassInputLayout.setError(null);
-                        emailInputLayout.setError(null);
-                        passInputLayout.setError(getResources().getString(R.string.pass_should));
-                        loginInputLayout.setError(null);
-                        break;
-                    case 3:
-                        emailInputLayout.setError(null);
-                        loginInputLayout.setError(null);
-                        passInputLayout.setError(getResources().getString(R.string.pass_made_up));
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case 4:
-                        emailInputLayout.setError(null);
-                        loginInputLayout.setError(null);
-                        passInputLayout.setError(null);
-                        checkPassInputLayout.setError(getResources().getString(R.string.pass_not_eq));
-                        break;
-                    case 5:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(getResources().getString(R.string.email_fail));
-                        passInputLayout.setError(null);
-                        checkPassInputLayout.setError(null);
-                        break;
-                    case 6:
+                    case 9:
                         emailInputLayout.setError(null);
                         loginInputLayout.setError(getResources().getString(R.string.login_used));
                         passInputLayout.setError(null);
                         checkPassInputLayout.setError(null);
                         break;
-                    case 7:
+                    case 10:
                         emailInputLayout.setError(getResources().getString(R.string.email_used));
                         loginInputLayout.setError(null);
                         passInputLayout.setError(null);

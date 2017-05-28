@@ -20,6 +20,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="menu_title">Меню</string>
     <string name="address"><u>Адрес</u></string>
     <string name="phone_number"><u>Телефон</u></string>
     <string name="web_site"><u>Вебсайт</u></string>
@@ -33,7 +34,7 @@
     <string name="title_description_subscription"><u>Описание</u></string>
     <string name="info_btn_subscription">Детали</string>
     <string name="buy_btn_subscription">Купить</string>
-    <string name="see_all_piece_of_news">Дальше</string>
+    <string name="see_all_piece_of_news">Открыть</string>
     <string name="reg_user_sign_up">Зарегистрироваться</string>
     <string name="reg_user_login">Ваш логин</string>
     <string name="reg_user_password">Ваш пароль</string>
@@ -86,4 +87,5 @@
     <string name="should_sign_in">Вы должны войти!</string>
     <string name="nothing_to_show">Ничего не найдено</string>
     <string name="check_internet">Проверьте Ваше соединение с Интернетом и попробуйте снова</string>
+    <string name="done">Готово</string>
 </resources>

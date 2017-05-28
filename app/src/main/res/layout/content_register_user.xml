@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="pc.emil.coffeex.activities.RegisterUserActivity"
     tools:showIn="@layout/app_bar_register_user">
@@ -24,22 +25,15 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
-
-        <TextView
-            style="@style/Base.TextAppearance.AppCompat.Large"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:gravity="center_horizontal"
-            android:text="@string/reg_user_sign_up"
-            android:textAllCaps="false"
-            android:textStyle="bold" />
+        tools:layout_constraintTop_creator="1"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/login_inputLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:errorEnabled="true">
 
             <EditText
@@ -52,7 +46,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/pass_inputLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <EditText
@@ -67,7 +61,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/check_pass_inputLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <EditText
@@ -82,7 +76,7 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/email_inputLayout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             app:errorEnabled="true">
 
             <EditText
@@ -112,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/reg_user_sign_up" />
+                android:text="@string/done" />
 
         </LinearLayout>
 

@@ -194,6 +194,7 @@ public class CoffeeShopCommentsActivity extends AppCompatActivity implements Vie
 
             listView.setAdapter(new CommentsAdapter(CoffeeShopCommentsActivity.this,
                     comments.toArray(new Comment[comments.size()])));
+            listView.setVisibility(View.VISIBLE);
             mainProgressBar.setVisibility(ProgressBar.GONE);
 
             if (comments.size() == 0) {

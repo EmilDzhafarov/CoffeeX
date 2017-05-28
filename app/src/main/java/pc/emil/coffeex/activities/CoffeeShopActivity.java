@@ -1,5 +1,9 @@
 package pc.emil.coffeex.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -22,10 +26,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -45,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pc.emil.coffeex.R;
+import pc.emil.coffeex.adapters.CoffeeAdapter;
 import pc.emil.coffeex.adapters.CoffeeShopAdapter;
 import pc.emil.coffeex.models.Coffee;
 import pc.emil.coffeex.models.CoffeeShop;
@@ -111,9 +119,14 @@ public class CoffeeShopActivity extends AppCompatActivity
                             ? "http://" + shop.getSite() : shop.getSite()));
                     break;
                 case R.id.show_coffee_button:
-                    result = new Intent(CoffeeShopActivity.this, CoffeeActivity.class);
-                    result.putExtra("coffee_shop", shop);
-                    break;
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(CoffeeShopActivity.this);
+                    final ListView listView = new ListView(CoffeeShopActivity.this);
+                    listView.setAdapter(new CoffeeAdapter(CoffeeShopActivity.this,
+                            shop.getCoffees().toArray(new Coffee[shop.getCoffees().size()])));
+                    builder.setView(listView);
+                    builder.setCancelable(true);
+                    builder.show();
+                    return;
                 case R.id.show_comments:
                     result = new Intent(CoffeeShopActivity.this, CoffeeShopCommentsActivity.class);
                     result.putExtra("coffee_shop", shop);
@@ -163,6 +176,22 @@ public class CoffeeShopActivity extends AppCompatActivity
         }
     }
 
+    private Toast toast;
+
+    private void displayToast(String message) {
+        if(toast != null)
+            toast.cancel();
+        toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    protected void onPause() {
+        if(toast != null)
+            toast.cancel();
+        super.onPause();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +210,8 @@ public class CoffeeShopActivity extends AppCompatActivity
         showComments.setOnClickListener(intentButtons);
 
         progressBar = (ProgressBar) findViewById(R.id.coffee_progressBar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(ProgressBar.GONE);
         imageProgressBar = (ProgressBar) findViewById(R.id.image_progressBar);
 
         imageView = (ImageView) findViewById(R.id.coffee_shop_imageView);
@@ -235,14 +265,18 @@ public class CoffeeShopActivity extends AppCompatActivity
             vkButton.setOnClickListener(this);
             instaButton.setOnClickListener(this);
 
-            new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            new LoadRating().execute();
+            if (globalUser.getId() != -1) {
+                progressBar.setIndeterminate(true);
+                progressBar.setVisibility(View.VISIBLE);
+                new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                new LoadRating().execute();
+                            }
                         }
-                    }
-            ).start();
+                ).start();
+            }
 
             new Thread(
                     new Runnable() {
@@ -254,14 +288,13 @@ public class CoffeeShopActivity extends AppCompatActivity
             ).start();
 
             startRating = ratingBar.getRating();
+
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, final float v, boolean b) {
                     if (globalUser.getId() == -1) {
                         ratingBar.setProgress(0);
-                        Toast.makeText(CoffeeShopActivity.this,
-                                getResources().getString(R.string.should_sign_in),
-                                Toast.LENGTH_SHORT).show();
+                        displayToast(getResources().getString(R.string.should_sign_in));
                     } else {
                         ratingBar.setRating(v);
                         new Thread(new Runnable() {
@@ -275,7 +308,7 @@ public class CoffeeShopActivity extends AppCompatActivity
             });
         }
 
-        if (!login.equals("") && !email.equals("")) {
+        if (!login.isEmpty() && !email.isEmpty()) {
             Menu menu = navigationView.getMenu();
             MenuItem item = menu.findItem(R.id.sign_in_item);
             item.setTitle(getResources().getString(R.string.sign_out));
@@ -434,11 +467,24 @@ public class CoffeeShopActivity extends AppCompatActivity
                         Toast.LENGTH_LONG
                 ).show();
             } else {
-                imageView.setImageBitmap(
-                        BitmapFactory.decodeStream(
-                                new ByteArrayInputStream(imageData)
-                        )
-                );
+                int radius = Math.max(imageView.getWidth(), imageView.getHeight());
+
+                Animator animator = ViewAnimationUtils.createCircularReveal(imageView,
+                        imageView.getWidth() / 2,
+                        imageView.getHeight() / 2,
+                        radius, 0);
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        imageView.setImageBitmap(
+                                BitmapFactory.decodeStream(
+                                        new ByteArrayInputStream(imageData)
+                                )
+                        );
+                    }
+                });
+                animator.setDuration(2000);
+                animator.start();
             }
         }
     }
