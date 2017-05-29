@@ -3,6 +3,7 @@ package pc.emil.coffeex.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.text.style.TextAppearanceSpan;
 import android.view.Gravity;
@@ -72,6 +73,12 @@ public class NewsAdapter extends BaseAdapter {
                         title.setTextSize(24);
                         title.setText(data[position].getTitle());
 
+                        View v = new View(context);
+                        v.setLayoutParams(new LinearLayout.LayoutParams(
+                                DrawerLayout.LayoutParams.MATCH_PARENT, 5
+                        ));
+                        v.setBackgroundColor(Color.parseColor("#B3B3B3"));
+
                         TextView text = new TextView(context);
                         text.setPadding(40,40,40,40);
                         text.setTextSize(20);
@@ -79,6 +86,7 @@ public class NewsAdapter extends BaseAdapter {
                         layout.setLayoutParams(new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
                         layout.addView(title);
+                        layout.addView(v);
                         layout.addView(text);
 
                         ScrollView scrollView = new ScrollView(context);

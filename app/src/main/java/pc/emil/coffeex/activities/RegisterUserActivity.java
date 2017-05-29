@@ -103,7 +103,7 @@ public class RegisterUserActivity extends AppCompatActivity
         }
     }
 
-    private int validateData(String login, String password, String password2, String email) {
+    public static int validateData(String login, String password, String password2, String email) {
         String loginRegExp = "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$";
         String emailRegExp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
 
@@ -277,7 +277,7 @@ public class RegisterUserActivity extends AppCompatActivity
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.login_drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.register_user_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

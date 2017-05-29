@@ -37,6 +37,7 @@ import static pc.emil.coffeex.activities.LoginActivity.SAVED_ID;
 import static pc.emil.coffeex.activities.LoginActivity.SAVED_LOGIN;
 import static pc.emil.coffeex.activities.LoginActivity.SAVED_PASSWORD;
 import static pc.emil.coffeex.activities.LoginActivity.globalUser;
+import static pc.emil.coffeex.activities.RegisterUserActivity.validateData;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -70,19 +71,66 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if (globalUser.getId() == -1) {
             Toast.makeText(this, getResources().getString(R.string.should_sign_in), Toast.LENGTH_SHORT).show();
         } else {
-            smallProgressBar.setVisibility(View.VISIBLE);
-            new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            new UpdateUserProfile().execute(
-                                    loginInputLayout.getEditText().getText().toString(),
-                                    passwordInputLayout.getEditText().getText().toString(),
-                                    emailInputLayout.getEditText().getText().toString()
-                            );
+            final String login = loginInputLayout.getEditText().getText().toString();
+            final String password = passwordInputLayout.getEditText().getText().toString();
+            final String email = emailInputLayout.getEditText().getText().toString();
+
+            int resultCode = validateData(login, password, password, email);
+
+            if (resultCode == 0) {
+                loginInputLayout.setError(null);
+                emailInputLayout.setError(null);
+                passwordInputLayout.setError(null);
+                smallProgressBar.setVisibility(View.VISIBLE);
+
+                new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                new UpdateUserProfile().execute(login, password, email);
+                            }
                         }
-                    }
-            ).start();
+                ).start();
+
+            } else {
+                switch (resultCode) {
+                    case 1:
+                        loginInputLayout.setError(getResources().getString(R.string.empty_login));
+                        emailInputLayout.setError(null);
+                        passwordInputLayout.setError(null);
+                        break;
+                    case 2:
+                        loginInputLayout.setError(getResources().getString(R.string.login_should));
+                        emailInputLayout.setError(null);
+                        passwordInputLayout.setError(null);
+                        break;
+                    case 3:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError(null);
+                        passwordInputLayout.setError(getResources().getString(R.string.empty_pass));
+                        break;
+                    case 4:
+                        emailInputLayout.setError(null);
+                        passwordInputLayout.setError(getResources().getString(R.string.pass_should));
+                        loginInputLayout.setError(null);
+                        break;
+                    case 5:
+                        emailInputLayout.setError(null);
+                        loginInputLayout.setError(null);
+                        passwordInputLayout.setError(getResources().getString(R.string.pass_made_up));
+                        break;
+                    case 7:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError(getResources().getString(R.string.empty_email));
+                        passwordInputLayout.setError(null);
+                        break;
+                    case 8:
+                        loginInputLayout.setError(null);
+                        emailInputLayout.setError(getResources().getString(R.string.email_fail));
+                        passwordInputLayout.setError(null);
+                        break;
+                }
+            }
         }
     }
 
@@ -422,28 +470,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected Void doInBackground(String... data) {
             if (connection != null) {
-                String loginRegExp = "^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$";
-                String emailRegExp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-
-                Pattern loginPattern = Pattern.compile(loginRegExp);
-                Pattern emailPattern = Pattern.compile(emailRegExp, Pattern.CASE_INSENSITIVE);
-
-                if (data[0].isEmpty()) {
-                    errorCode = -3;
-                } else if (data[1].isEmpty()) {
-                    errorCode = -2;
-                } else if (data[2].isEmpty()) {
-                    errorCode = -1;
-                } else if (!loginPattern.matcher(data[0]).matches()) {
-                    errorCode = 1;
-                } else if (!loginPattern.matcher(data[1]).matches()) {
-                    errorCode = 2;
-                } else if (data[1].length() < 6) {
-                    errorCode = 3;
-                } else if (!emailPattern.matcher(data[2]).matches()) {
-                    errorCode = 4;
-                }
-
                 if (errorCode == 0 &&
                         (!data[0].equals(globalUser.getLogin())
                               || !data[2].equals(globalUser.getEmail())
@@ -462,10 +488,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             String e = resultSet.getString(2);
 
                             if (l.equals(data[0]) && !globalUser.getLogin().equals(l)) {
-                                errorCode = 5;
+                                errorCode = 9;
                                 return null;
                             } else if (e.equals(data[2]) && !globalUser.getEmail().equals(e)) {
-                                errorCode = 6;
+                                errorCode = 10;
                                 return null;
                             }
                         }
@@ -521,47 +547,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 Toast.LENGTH_LONG
                         ).show();
                         break;
-                    case -3:
-                        loginInputLayout.setError(getResources().getString(R.string.empty_login));
-                        emailInputLayout.setError(null);
-                        passwordInputLayout.setError(null);
-                        break;
-                    case -2:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(null);
-                        passwordInputLayout.setError(getResources().getString(R.string.empty_pass));
-                        break;
-                    case -1:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(getResources().getString(R.string.empty_email));
-                        passwordInputLayout.setError(null);
-                        break;
-                    case 1:
-                        loginInputLayout.setError(getResources().getString(R.string.login_should));
-                        emailInputLayout.setError(null);
-                        passwordInputLayout.setError(null);
-                        break;
-                    case 2:
-                        emailInputLayout.setError(null);
-                        passwordInputLayout.setError(getResources().getString(R.string.pass_should));
-                        loginInputLayout.setError(null);
-                        break;
-                    case 3:
-                        emailInputLayout.setError(null);
-                        loginInputLayout.setError(null);
-                        passwordInputLayout.setError(getResources().getString(R.string.pass_made_up));
-                        break;
-                    case 4:
-                        loginInputLayout.setError(null);
-                        emailInputLayout.setError(getResources().getString(R.string.email_fail));
-                        passwordInputLayout.setError(null);
-                        break;
-                    case 5:
+                    case 9:
                         emailInputLayout.setError(null);
                         loginInputLayout.setError(getResources().getString(R.string.login_used));
                         passwordInputLayout.setError(null);
                         break;
-                    case 6:
+                    case 10:
                         emailInputLayout.setError(getResources().getString(R.string.email_used));
                         loginInputLayout.setError(null);
                         passwordInputLayout.setError(null);
@@ -586,10 +577,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         Toast.LENGTH_SHORT
                 ).show();
 
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                SettingsActivity.this.onRestart();
             }
         }
     }

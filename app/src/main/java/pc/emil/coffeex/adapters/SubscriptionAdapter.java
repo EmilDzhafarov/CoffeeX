@@ -2,13 +2,16 @@ package pc.emil.coffeex.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -83,13 +86,31 @@ public class SubscriptionAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                TextView title = new TextView(context);
+                title.setPadding(40,40,40,40);
+                title.setTextSize(24);
+                title.setText(data[position].getTitle());
+
                 TextView textView = new TextView(context);
                 textView.setPadding(40,40,40,40);
                 textView.setTextSize(20);
                 textView.setText(data[position].getDescription());
 
+                View v = new View(context);
+                v.setLayoutParams(new LinearLayout.LayoutParams(
+                        DrawerLayout.LayoutParams.MATCH_PARENT, 5
+                ));
+                v.setBackgroundColor(Color.parseColor("#B3B3B3"));
+
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.addView(title);
+                layout.addView(v);
+                layout.addView(textView);
+
                 ScrollView scrollView = new ScrollView(context);
-                scrollView.addView(textView);
+                scrollView.addView(layout);
                 builder.setView(scrollView);
                 builder.setCancelable(true);
                 builder.show();

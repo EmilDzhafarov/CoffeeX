@@ -79,7 +79,7 @@
     <string name="empty_login">Login is empty</string>
     <string name="search_title">Search Coffee shop</string>
     <string name="search_hint">Enter address or name</string>
-    <string name="coffee_shop_not_found">Coffee shop not found \\nTry again</string>
+    <string name="coffee_shop_not_found">Coffee shop not found\nTry again please</string>
     <string name="user_not_found">User not found! Please sign up</string>
     <string name="comment_failure">Comment message does not contain \'. Use \" instead</string>
     <string name="comment_empty">Comment message is empty</string>

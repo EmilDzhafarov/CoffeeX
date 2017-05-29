@@ -79,7 +79,7 @@
     <string name="empty_login">Логин пуст</string>
     <string name="search_title">Поиск кофеен</string>
     <string name="search_hint">Введите адрес или название</string>
-    <string name="coffee_shop_not_found">Кофейня не найдена \\nПопробуйте снова</string>
+    <string name="coffee_shop_not_found">Кофейня не найдена\nПопробуйте снова</string>
     <string name="user_not_found">Пользователь не найден</string>
     <string name="comment_failure">Комментарий не должен содержать \'. Используйте \" </string>
     <string name="comment_empty">Комментарий пуст. Введите текст</string>
